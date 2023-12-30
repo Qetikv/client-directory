@@ -1,53 +1,43 @@
 <h2>კლიენტის დამატება</h2>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <mat-form-field>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+        <mat-form-field class="form-field">
             <input matInput formControlName="firstName" placeholder="სახელი" />
             <mat-error *ngIf="form.get('firstName')?.hasError('required')">სახელი აუცილებელია</mat-error>
             <mat-error *ngIf="form.get('firstName')?.hasError('minlength')">სახელი უნდა იყოს მინიმუმ 2 სიმბოლო</mat-error>
             <mat-error *ngIf="form.get('firstName')?.hasError('maxlength')">სახელი უნდა იყოს მაქსიმუმ 50 სიმბოლო</mat-error>
             <mat-error *ngIf="form.get('firstName')?.hasError('invalidCharacters')">სახელი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს</mat-error>
         </mat-form-field>
-    </div>
 
-    <div class="form-group">
-        <mat-form-field>
+        <mat-form-field class="form-field">
             <input matInput formControlName="lastName" placeholder="გვარი" />
             <mat-error *ngIf="form.get('lastName')?.hasError('required')">გვარი აუცილებელია</mat-error>
             <mat-error *ngIf="form.get('lastName')?.hasError('minlength')">გვარი უნდა იყოს მინიმუმ 2 სიმბოლო</mat-error>
             <mat-error *ngIf="form.get('lastName')?.hasError('maxlength')">გვარი უნდა იყოს მაქსიმუმ 50 სიმბოლო</mat-error>
             <mat-error *ngIf="form.get('lastName')?.hasError('invalidCharacters')">გვარი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს</mat-error>
         </mat-form-field>
-    </div>
 
-    <div class="form-group">
-        <mat-form-field>
+        <mat-form-field class="form-field">
             <mat-label>სქესი</mat-label>
             <mat-select formControlName="gender">
                 <mat-option value="male">კაცი</mat-option>
                 <mat-option value="female">ქალი</mat-option>
             </mat-select>
         </mat-form-field>
-    </div>
 
-    <div class="form-group">
-        <mat-form-field>
+        <mat-form-field class="form-field">
             <input matInput placeholder="პირადი ნომერი" formControlName="privateNumber" />
             <mat-error *ngIf="form.get('privateNumber')?.hasError('required')">პირადი ნომერი აუცილებელია</mat-error>
             <mat-error *ngIf="form.get('privateNumber')?.hasError('pattern')">პირადი ნომერი უნდა იყოს 11 სიმბოლო</mat-error>
         </mat-form-field>
-    </div>
 
-    <div class="form-group">
-        <mat-form-field>
+        <mat-form-field class="form-field">
             <input matInput placeholder="მობილურის ნომერი" formControlName="mobileNumber" />
             <mat-error *ngIf="form.get('mobileNumber')?.hasError('required')">მობილური ნომერი აუცილებელია</mat-error>
             <mat-error *ngIf="form.get('mobileNumber')?.hasError('invalidMobileNumber')">მობილურის ნომერი არასწორია</mat-error>
         </mat-form-field>
-    </div>
 
-    <div>
+    <div class="button-container">
         <button mat-raised-button type="submit">Submit</button>
         <button mat-button (click)="closeDialog()">Close</button>
     </div>
