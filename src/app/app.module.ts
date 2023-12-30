@@ -8,8 +8,12 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserDatatableComponent } from './user-datatable/user-datatable.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -20,11 +24,15 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatFormFieldModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
+    FormsModule,
     ReactiveFormsModule,
-    MatTableModule
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatOptionModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
