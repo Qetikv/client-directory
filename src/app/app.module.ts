@@ -24,13 +24,13 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
     MatOptionModule,
-    MatFormFieldModule,
     MatSelectModule,
     BrowserAnimationsModule
   ],
