@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
+import { User } from './user.model';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 })
 export class AppComponent {
   constructor(private dialog: MatDialog, private cdr: ChangeDetectorRef) { }
+  userList: User[] = []; 
 
   openDialog(): void {
     const dialogRef = this.dialog.open(UserDialogComponent, {

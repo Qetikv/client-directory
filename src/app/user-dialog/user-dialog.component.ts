@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UsersDataService } from '../users-data.service';
 
 @Component({
   selector: 'app-user-dialog',
@@ -10,13 +11,21 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class UserDialogComponent implements OnInit {
   form!: FormGroup;
+  
   constructor(private fb: FormBuilder,
               private elRef: ElementRef,
+              private usersDataService: UsersDataService,
               public dialogRef: MatDialogRef<UserDialogComponent>) { }
 
 
   ngOnInit(): void {
     this.initializeForm();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.setFocusOnFirstInput();
+    });
   }
 
   initializeForm(): void {
@@ -43,13 +52,22 @@ export class UserDialogComponent implements OnInit {
       mobileNumber: ['', [
         Validators.required, this.customMobileNumberValidator]
       ],
-      legalAddress: this.createAddressGroup(),
-      actualAddress: this.createAddressGroup()
+      countryLegal: ['', Validators.required],
+      cityLegal: ['', Validators.required],
+      addressLegal: ['', Validators.required],
+      countryActual: ['', Validators.required],
+      cityActual: ['', Validators.required],
+      addressActual: ['', Validators.required],
+      // legalAddress: this.createAddressGroup(),
+      // actualAddress: this.createAddressGroup()
     });
   }
 
-  ngAfterViewInit(): void {
-    this.elRef.nativeElement.focus();
+    setFocusOnFirstInput(): void {
+    const firstInput = this.elRef.nativeElement.querySelector('input');
+    if (firstInput) {
+      firstInput.focus();
+    }
   }
 
   private customNameValidator(control: AbstractControl): ValidationErrors | null {
@@ -86,7 +104,8 @@ export class UserDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      console.log('Form submitted:', this.form.value);
+      const userData = this.form.value;
+      this.usersDataService.getSampleData();
 
       this.dialogRef.close();
     }

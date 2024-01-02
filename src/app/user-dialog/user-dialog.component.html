@@ -39,36 +39,68 @@
 
     <h3>იურიდიული მისამართი</h3>
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress.country" placeholder="ქვეყანა" />
+      <input matInput formControlName="countryLegal" placeholder="ქვეყანა" />
+      <mat-error *ngIf="form.get('countryLegal')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field" appearance="outline">
+      <input matInput formControlName="cityLegal" placeholder="ქალაქი" />
+      <mat-error *ngIf="form.get('cityLegal')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field" appearance="outline">
+      <input matInput formControlName="addressLegal" placeholder="მისამართი" />
+      <mat-error *ngIf="form.get('addressLegal')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+    </mat-form-field>
+
+    <h3>ფაქტიური მისამართი</h3>
+    <mat-form-field class="form-field" appearance="outline">
+      <input matInput formControlName="countryActual" placeholder="ქვეყანა" />
+      <mat-error *ngIf="form.get('countryActual')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field" appearance="outline">
+      <input matInput formControlName="cityActual" placeholder="ქალაქი" />
+      <mat-error *ngIf="form.get('cityActual')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="form-field" appearance="outline">
+      <input matInput formControlName="addressActual" placeholder="მისამართი" />
+      <mat-error *ngIf="form.get('addressActual')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+    </mat-form-field>
+
+    <!-- <h3>იურიდიული მისამართი</h3>
+    <mat-form-field class="form-field" appearance="outline">
+        <input matInput formControlName="legalAddress" placeholder="ქვეყანა" />
         <mat-error *ngIf="form.get('legalAddress.country')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress.city" placeholder="ქალაქი" />
+        <input matInput formControlName="legalAddress" placeholder="ქალაქი" />
         <mat-error *ngIf="form.get('legalAddress.city')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress.address" placeholder="მისამართი" />
+        <input matInput formControlName="legalAddress" placeholder="მისამართი" />
         <mat-error *ngIf="form.get('legalAddress.address')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <h3>ფაქტიური მისამართი</h3>
+    <!-- <h3>ფაქტიური მისამართი</h3>
 
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress.country" placeholder="ქვეყანა" />
+        <input matInput formControlName="actualAddress" placeholder="ქვეყანა" />
         <mat-error *ngIf="form.get('actualAddress.country')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress.city" placeholder="ქალაქი" />
+        <input matInput formControlName="actualAddress" placeholder="ქალაქი" />
         <mat-error *ngIf="form.get('actualAddress.city')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress.address" placeholder="მისამართი" />
+        <input matInput formControlName="actualAddress" placeholder="მისამართი" />
         <mat-error *ngIf="form.get('actualAddress.address')?.hasError('required')">მისამართი აუცილებელია</mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <div class="button-container">
         <button mat-raised-button type="submit">Submit</button>

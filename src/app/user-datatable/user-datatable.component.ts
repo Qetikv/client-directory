@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+// user-datatable.component.ts
+import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { UsersDataService } from '../users-data.service';
+import { User } from '../user.model'; // Import the UserData model
 
 @Component({
   selector: 'app-user-datatable',
@@ -8,12 +9,11 @@ import { UsersDataService } from '../users-data.service';
   styleUrls: ['./user-datatable.component.scss'],
 })
 export class UserDatatableComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'description'];
-  dataSource = new MatTableDataSource<any>();
-
-  constructor(private dataService: UsersDataService) { }
+  @Input() userData!: User[];
+  displayedColumns: string[] = ['სახელი', 'გვარი', 'სქესი', 'პირადი ნომერი', 'მობილურის ნომერი', 'ლეგალური მისამართი', 'იურიდიული მისამართი'];
+  dataSource = new MatTableDataSource<User>();
 
   ngOnInit(): void {
-    this.dataSource.data = this.dataService.getSampleData();
+    this.dataSource.data = this.userData;
   }
 }
