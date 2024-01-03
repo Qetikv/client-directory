@@ -11,4 +11,16 @@ button {
   button:hover {
     background-color: #1565c0;
   }
+
+  /* main-page.component.scss */
+
+.mat-elevation-z8 {
+  margin-top: 20px;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
   

@@ -103,10 +103,11 @@ export class UserDialogComponent implements OnInit {
     });
   }
 
+
   onSubmit(): void {
     if (this.form.valid) {
       const userData: User = {
-        id: this.generateUniqueId(),
+        nId: this.generateUniqueId(),
         ...this.form.value,
       };
 
