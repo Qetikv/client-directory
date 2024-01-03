@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewEncapsulation } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UsersDataService } from '../users-data.service';
+import { User } from '../user.model';
 
 @Component({
   selector: 'app-user-dialog',
@@ -104,11 +105,27 @@ export class UserDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const userData = this.form.value;
-      this.usersDataService.getSampleData();
+      const userData: User = {
+        id: this.generateUniqueId(),
+        ...this.form.value,
+      };
 
-      this.dialogRef.close();
+      // Make the HTTP POST request to save user data to the backend
+      this.usersDataService.addUserData(userData).subscribe(
+        (response) => {
+          console.log('User added successfully:', response);
+          this.usersDataService.addUserData(response);
+          this.dialogRef.close();
+        },
+        (error) => {
+          console.error('Error adding user:', error);
+        }
+      );
     }
+  }
+
+  private generateUniqueId(): number {
+    return Date.now();
   }
 
   closeDialog(): void {

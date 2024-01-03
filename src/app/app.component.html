@@ -2,4 +2,6 @@
 
 <button mat-button (click)="openDialog()">კლიენტის დამატება</button>
 
-<app-user-datatable></app-user-datatable>
+<div *ngFor="let user of users">
+  {{ user.firstName }} {{ user.lastName }}
+</div>
