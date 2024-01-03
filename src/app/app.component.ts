@@ -13,7 +13,7 @@ import { UsersDataService } from './users-data.service';
 export class AppComponent {
   userList: User[] = [];
   users: User[] = [];
-  displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender'];
+  displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender',  'delete'];
   searchText: string = '';
 
   constructor(
@@ -30,6 +30,10 @@ export class AppComponent {
   loadUsers() {
     this.userList = this.usersDataService.getUsers();
     this.applySearchFilter();
+  }
+
+  applyFilter() {
+    this.fetchUsers(); // Refresh the users based on the updated searchText
   }
 
   fetchUsers() {
@@ -61,6 +65,19 @@ export class AppComponent {
     });
   }
 
+  deleteUser(userId: number): void {
+    this.usersDataService.deleteUserById(userId).subscribe(
+      () => {
+        console.log('User deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting user:', error);
+      }
+    );
+  }
+  clearUsersTable(): void {
+    this.usersDataService.clearLocalStorageData();
+  }
   private isMatchingSearch(user: User, searchText: string): boolean {
     const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
     return fullName.includes(searchText.toLowerCase());

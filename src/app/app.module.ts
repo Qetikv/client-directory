@@ -15,6 +15,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -35,8 +37,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
-    HttpClientModule
-    
+    HttpClientModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

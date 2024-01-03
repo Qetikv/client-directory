@@ -46,4 +46,27 @@ export class UsersDataService {
   getUsers(): User[] {
     return this.users;
   }
+
+  clearLocalStorageData(): void {
+    localStorage.removeItem('users');
+    this.users = [];
+    this.usersSubject.next([]);
+  }
+  deleteUserById(userId: number): Observable<void> {
+    const apiUrl = `http://localhost:3000/api/users/${userId}`;
+    return this.http.delete<void>(apiUrl).pipe(
+      tap(() => {
+        // Update the local users array
+        this.users = this.users.filter(user => user.nId !== userId);
+        // Save the updated users to local storage
+        this.saveUsersToLocalStorage(this.users);
+        // Notify subscribers about the change
+        this.usersSubject.next([...this.users]);
+      }),
+      catchError((error) => {
+        console.error('Error deleting user:', error);
+        return throwError(error);
+      })
+    );
+  }
 }

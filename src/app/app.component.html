@@ -1,12 +1,12 @@
 <h2>კლიენტების ცნობარი</h2>
-
+<button mat-button (click)="clearUsersTable()">Clear Users Table</button>
 <button mat-button (click)="openDialog()">კლიენტის დამატება</button>
-
 
 <div>
   <mat-form-field>
     <input matInput [(ngModel)]="searchText" placeholder="Search by name" />
   </mat-form-field>
+  <button mat-button (click)="applyFilter()">ძებნა</button>
 </div>
 
 <div class="mat-elevation-z8">
@@ -31,7 +31,15 @@
       <th mat-header-cell *matHeaderCellDef>სქესი</th>
       <td mat-cell *matCellDef="let user">{{ user.gender }}</td>
     </ng-container>
-
+    
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-icon-button color="warn" (click)="deleteUser(user.nId)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
