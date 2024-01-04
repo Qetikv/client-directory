@@ -11,7 +11,7 @@ import { User } from '../user.model';
 export class UserDetailsComponent implements OnInit {
   user: User | undefined;
   userId: number | null = null;
-
+  isEditable = false; 
   constructor(
     private route: ActivatedRoute,
     private usersDataService: UsersDataService
@@ -25,5 +25,14 @@ export class UserDetailsComponent implements OnInit {
         this.user = this.usersDataService.getUserById(this.userId);
       }
     });
+  }
+
+  toggleEditMode(): void {
+    this.isEditable = !this.isEditable;
+  }
+
+  saveChanges(): void {
+  
+    this.isEditable = false; 
   }
 }

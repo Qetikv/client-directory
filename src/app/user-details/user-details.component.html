@@ -1,8 +1,62 @@
-<p>user-details works!</p>
-<div *ngIf="user">
-    <h2>User Details</h2>
-    <p>N ID: {{ user.nId }}</p>
-    <p>First Name: {{ user.firstName }}</p>
-    <p>Last Name: {{ user.lastName }}</p>
+<form *ngIf="user">
+  <h2>User Details</h2>
+
+  <div>
+    <label for="nId">N ID:</label>
+    <input type="text" id="nId" [value]="user.nId" readonly />
   </div>
-  
+
+  <div>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" [value]="user.firstName" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" [value]="user.lastName" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" [value]="user.gender" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="privateNumber">Private Number:</label>
+    <input type="text" id="privateNumber" [value]="user.privateNumber" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="mobileNumber">Mobile Number:</label>
+    <input type="text" id="mobileNumber" [value]="user.mobileNumber" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="countryLegal">Country (Legal):</label>
+    <input type="text" id="countryLegal" [value]="user.countryLegal" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="cityLegal">City (Legal):</label>
+    <input type="text" id="cityLegal" [value]="user.cityLegal" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="addressLegal">Address (Legal):</label>
+    <input type="text" id="addressLegal" [value]="user.addressLegal" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="countryActual">Country (Actual):</label>
+    <input type="text" id="countryActual" [value]="user.countryActual" [readonly]="!isEditable" />
+  </div>
+
+  <div>
+    <label for="cityActual">City (Actual):</label>
+    <input type="text" id="cityActual" [value]="user.cityActual" [readonly]="!isEditable" />
+  </div>
+
+  <!-- Add a "Save" button -->
+  <button type="button" (click)="toggleEditMode()">Toggle Edit Mode</button>
+  <button *ngIf="isEditable" type="button" (click)="saveChanges()">Save Changes</button>
+</form>
