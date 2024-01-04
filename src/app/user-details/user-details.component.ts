@@ -21,8 +21,7 @@ export class UserDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private usersDataService: UsersDataService,
-    private dialogService: UsersDataService,  // Inject DialogService
+    private usersDataService: UsersDataService
   ) {}
 
   ngOnInit(): void {
@@ -54,25 +53,21 @@ export class UserDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(UserAccountFormDialogComponent, {
       width: '600px',
       height: '600px',
+      data: { user: this.user }, // Pass user data to the dialog
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-    });
-  }
-
-  // Close the user account form dialog
-//   closeUserAccountFormDialog(result: any): void {
-//     if (result) {
-//       // Handle the result (saved data) here if needed
-//       console.log('User Account Form Dialog closed with result:', result);
-//       // Update the user object with the new account data
-//       if (!this.user?.accounts) {
-//         this.user!. = [];
+//     dialogRef.afterClosed().subscribe((result) => {
+//       if (result) {
+//         // Handle the result (saved data) here if needed
+//         console.log('User Account Form Dialog closed with result:', result);
+//         // Update the user object with the new account data
+//         if (!this.user?.accounts) {
+//           this.user!.accounts = [];
+//         }
+//         this.user!.accounts.push(result);
 //       }
-//       this.user!.accounts.push(result);
-//     }
-
-//     this.showUserAccountFormDialog = false;
-//   }
-// }
+// // 
+//       this.showUserAccountFormDialog = false;
+//     });
+  }
 }

@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { RouterModule } from '@angular/router';
 import { UserAccountFormDialogComponent } from './user-account-form-dialog/user-account-form-dialog.component';
-import { EditUserDetailsPageComponent } from './edit-user-details-page/edit-user-details-page.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { EditUserDetailsPageComponent } from './edit-user-details-page/edit-user
     UserDialogComponent,
     UserDetailsComponent,
     UserAccountFormDialogComponent,
-    EditUserDetailsPageComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,

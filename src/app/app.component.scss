@@ -1,28 +1,11 @@
-button {
-    background-color: #2196f3;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #1565c0;
-  }
-
-.mat-elevation-z8 {
-  margin-top: 20px;
+.clickable-header {
+  cursor: pointer;
+  color: blue; /* Choose your preferred color */
+  text-decoration: underline;
 }
 
-mat-form-field {
-  margin-bottom: 20px;
-  width: 100%;
+.navbar-buttons {
+  /* Add styles for your navbar buttons */
+  display: flex;
+  gap: 10px;
 }
-
-button[mat-icon-button] {
-  color: red;
-}
-
-  
