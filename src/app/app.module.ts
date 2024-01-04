@@ -17,12 +17,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { RouterModule } from '@angular/router';
+import { UserAccountFormDialogComponent } from './user-account-form-dialog/user-account-form-dialog.component';
+import { EditUserDetailsPageComponent } from './edit-user-details-page/edit-user-details-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserDialogComponent,
     UserDetailsComponent,
+    UserAccountFormDialogComponent,
+    EditUserDetailsPageComponent,
   ],
   imports: [
     BrowserModule,

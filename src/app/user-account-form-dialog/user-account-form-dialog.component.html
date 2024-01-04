@@ -1,0 +1,38 @@
+<h2>Add User Account</h2>
+<form [formGroup]="accountForm">
+  <mat-form-field>
+    <input matInput placeholder="Account Number" formControlName="accountNumber" />
+    <mat-error *ngIf="accountForm.get('accountNumber')?.hasError('pattern')">Invalid account number</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Customer Number" formControlName="customerNumber" />
+    <mat-error *ngIf="accountForm.get('customerNumber')?.hasError('pattern')">Invalid customer number</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Account Type</mat-label>
+    <mat-select formControlName="accountType">
+      <mat-option *ngFor="let type of accountTypes" [value]="type">{{ type }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Currency</mat-label>
+    <mat-select formControlName="currency">
+      <mat-option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Account Status</mat-label>
+    <mat-select formControlName="accountStatus">
+      <mat-option *ngFor="let status of accountStatusOptions" [value]="status">{{ status }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button mat-raised-button (click)="close()">Cancel</button>
+  </div>
+</form>
