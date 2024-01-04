@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { User } from './user.model';
 import { UsersDataService } from './users-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,12 +14,17 @@ import { UsersDataService } from './users-data.service';
 export class AppComponent {
   userList: User[] = [];
   users: User[] = [];
-  displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender',  'delete'];
+  displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender',  'delete', 'edit'];
   searchText: string = '';
+
+  currentPage: number = 1;
+  usersPerPage: number = 2;
+  totalPages: number = 1;
 
   constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private router: Router,
     private usersDataService: UsersDataService
   ) {}
 
@@ -32,8 +38,17 @@ export class AppComponent {
     this.applySearchFilter();
   }
 
-  applyFilter() {
-    this.fetchUsers(); // Refresh the users based on the updated searchText
+  // applyFilter() {
+  //   this.fetchUsers(); // Refresh the users based on the updated searchText
+  // }
+
+  redirectToDetailsPage(userId: number): void {
+    this.router.navigate(['/user', userId]);
+  }
+
+  editUser(userId: number): void {
+    // Navigate to the user details page for editing
+    this.router.navigate(['/user', userId]);
   }
 
   fetchUsers() {
@@ -47,11 +62,22 @@ export class AppComponent {
       }
     );
   }
+  
 
   applySearchFilter() {
     this.users = this.userList.filter((user) =>
       this.isMatchingSearch(user, this.searchText)
     );
+  }
+
+  applyFilter() {
+    this.currentPage = 1; // Reset to the first page when applying a filter
+    this.fetchUsers();
+  }
+
+  changePage(page: number) {
+    this.currentPage = page;
+    this.fetchUsers();
   }
 
   openDialog(): void {
@@ -78,6 +104,11 @@ export class AppComponent {
   clearUsersTable(): void {
     this.usersDataService.clearLocalStorageData();
   }
+  // clearUsersTable() {
+  //   this.searchText = '';
+  //   this.currentPage = 1; // Reset to the first page when clearing the search
+  //   this.fetchUsers();
+  // }
   private isMatchingSearch(user: User, searchText: string): boolean {
     const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
     return fullName.includes(searchText.toLowerCase());

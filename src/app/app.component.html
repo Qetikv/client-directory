@@ -1,4 +1,6 @@
 <h2>კლიენტების ცნობარი</h2>
+<router-outlet></router-outlet>
+
 <button mat-button (click)="clearUsersTable()">Clear Users Table</button>
 <button mat-button (click)="openDialog()">კლიენტის დამატება</button>
 
@@ -8,7 +10,12 @@
   </mat-form-field>
   <button mat-button (click)="applyFilter()">ძებნა</button>
 </div>
+<div class="pagination">
+  <button mat-button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button mat-button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
 
+</div>
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="users" class="mat-elevation-z8">
 
@@ -40,7 +47,16 @@
         </button>
       </td>
     </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Edit</th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-icon-button color="primary" (click)="editUser(user.nId)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="redirectToDetailsPage(row.nId)"></tr>
   </table>
 </div>

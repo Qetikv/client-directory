@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { UserDatatableComponent } from './user-datatable/user-datatable.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,13 +15,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
-
+import { UserDetailsComponent } from './user-details/user-details.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserDialogComponent,
-    UserDatatableComponent
+    UserDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +38,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

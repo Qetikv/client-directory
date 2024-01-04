@@ -9,6 +9,10 @@ import { User } from './user.model';
 export class UsersDataService {
   private users: User[] = this.loadUsersFromLocalStorage();
   private usersSubject = new BehaviorSubject<User[]>(this.users);
+  currentPage: number = 1;
+  usersPerPage: number = 2;
+  totalPages: number = 1;
+  searchText = '';
 
   users$: Observable<User[]> = this.usersSubject.asObservable();
 
@@ -35,13 +39,19 @@ export class UsersDataService {
 
   fetchUsers(): Observable<User[]> {
     console.log('Fetching users...');
-    return this.http.get<User[]>('http://localhost:3000/api/users').pipe(
+    const params = {
+      search: this.searchText || '',
+      page: this.currentPage.toString(),
+      limit: this.usersPerPage.toString(),
+    };
+    return this.http.get<User[]>('http://localhost:3000/api/users', { params }).pipe(
       catchError((error) => {
         console.error('Error fetching users:', error);
         return throwError(error);
       })
     );
   }
+  
 
   getUsers(): User[] {
     return this.users;
@@ -68,5 +78,9 @@ export class UsersDataService {
         return throwError(error);
       })
     );
+  }
+
+  getUserById(userId: number): User | undefined {
+    return this.users.find((user) => user.nId === userId);
   }
 }
