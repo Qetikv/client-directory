@@ -4,6 +4,7 @@ import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 import { User } from '../user.model';
 import { UsersDataService } from '../users-data.service';
 import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-user-list',
@@ -12,12 +13,12 @@ import { Router } from '@angular/router';
 })
 export class UserListComponent implements OnInit {
   userList: User[] = [];
-  users: User[] = [];
+  users: MatTableDataSource<User> = new MatTableDataSource<User>();
   displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender', 'delete', 'edit'];
   searchText: string = '';
 
   currentPage: number = 1;
-  usersPerPage: number = 2;
+  usersPerPage: number = 10;
   totalPages: number = 1;
 
   constructor(
@@ -27,17 +28,7 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadUsers();
     this.fetchUsers();
-  }
-
-  loadUsers() {
-    this.userList = this.usersDataService.getUsers();
-    this.applySearchFilter();
-  }
-
-  redirectToDetailsPage(userId: number): void {
-    this.router.navigate(['edit', userId]);
   }
 
   fetchUsers() {
@@ -45,6 +36,8 @@ export class UserListComponent implements OnInit {
       (users) => {
         this.userList = users;
         this.applySearchFilter();
+        this.calculateTotalPages();
+        this.paginateUsers();
       },
       (error) => {
         console.error('Error fetching users:', error);
@@ -53,17 +46,19 @@ export class UserListComponent implements OnInit {
   }
 
   applySearchFilter() {
-    this.users = this.userList.filter((user) => this.isMatchingSearch(user, this.searchText));
+    this.users.data = this.userList.filter((user) => this.isMatchingSearch(user, this.searchText));
   }
 
   applyFilter() {
-    this.currentPage = 1; // Reset to the first page when applying a filter
+    this.currentPage = 1;
     this.fetchUsers();
   }
 
   changePage(page: number) {
-    this.currentPage = page;
-    this.fetchUsers();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateUsers();
+    }
   }
 
   openDialog(): void {
@@ -81,6 +76,7 @@ export class UserListComponent implements OnInit {
     this.usersDataService.deleteUserById(userId).subscribe(
       () => {
         console.log('User deleted successfully');
+        this.fetchUsers();
       },
       (error) => {
         console.error('Error deleting user:', error);
@@ -88,12 +84,22 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  clearUsersTable(): void {
-    this.usersDataService.clearLocalStorageData();
+  redirectToDetailsPage(userId: number): void {
+    this.router.navigate(['/details', userId]);
   }
 
   private isMatchingSearch(user: User, searchText: string): boolean {
     const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
     return fullName.includes(searchText.toLowerCase());
+  }
+
+  private calculateTotalPages() {
+    this.totalPages = Math.ceil(this.userList.length / this.usersPerPage);
+  }
+
+  private paginateUsers() {
+    const startIndex = (this.currentPage - 1) * this.usersPerPage;
+    const endIndex = startIndex + this.usersPerPage;
+    this.users.data = this.userList.slice(startIndex, endIndex);
   }
 }

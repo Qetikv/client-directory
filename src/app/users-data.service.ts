@@ -27,6 +27,14 @@ export class UsersDataService {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
+  saveUserAccountData(accountData: any): void {
+    console.log('Saving user account data:', accountData);
+    const storedAccounts = localStorage.getItem('userAccounts');
+    const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
+    accounts.push(accountData);
+    localStorage.setItem('userAccounts', JSON.stringify(accounts));
+  }
+
   addUserData(user: User): Observable<User> {
     return this.http.post<User>('http://localhost:3000/api/users', user).pipe(
       tap((addedUser) => {
@@ -51,7 +59,12 @@ export class UsersDataService {
       })
     );
   }
-  
+  getUserAccounts(userId: number): any[] {
+    console.log('Fetching user accounts for user with ID:', userId);
+
+    const storedAccounts = localStorage.getItem('userAccounts');
+    return storedAccounts ? JSON.parse(storedAccounts) : [];
+  }
 
   getUsers(): User[] {
     return this.users;
@@ -75,6 +88,18 @@ export class UsersDataService {
       }),
       catchError((error) => {
         console.error('Error deleting user:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  updateUser(userId: number, updatedUser: User): Observable<User> {
+    const apiUrl = `http://localhost:3000/api/users/${userId}`;
+    return this.http.put<User>(apiUrl, updatedUser).pipe(
+      tap((user) => {
+      }),
+      catchError((error) => {
+        console.error('Error updating user:', error);
         return throwError(error);
       })
     );

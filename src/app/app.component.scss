@@ -1,11 +1,10 @@
 .clickable-header {
   cursor: pointer;
-  color: blue; /* Choose your preferred color */
-  text-decoration: underline;
+  color: blue;
+  text-decoration: solid;
 }
 
 .navbar-buttons {
-  /* Add styles for your navbar buttons */
   display: flex;
   gap: 10px;
 }

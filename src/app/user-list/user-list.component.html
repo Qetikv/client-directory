@@ -1,17 +1,11 @@
 
-<button mat-button (click)="clearUsersTable()">Clear Users Table</button>
-<button mat-button (click)="openDialog()">კლიენტის დამატება</button>
+<button mat-button  class="add-client-button" (click)="openDialog()">კლიენტის დამატება</button>
 
 <div>
   <mat-form-field>
-    <input matInput [(ngModel)]="searchText" placeholder="Search by name" />
+    <input matInput class="search-bar" [(ngModel)]="searchText" placeholder="Search by name" />
   </mat-form-field>
   <button mat-button (click)="applyFilter()">ძებნა</button>
-</div>
-<div class="pagination">
-  <button mat-button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-  <span>Page {{ currentPage }} of {{ totalPages }}</span>
-  <button mat-button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
 </div>
 
 <div class="mat-elevation-z8">
@@ -57,4 +51,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="redirectToDetailsPage(row.nId)"></tr>
   </table>
+  <div class="pagination">
+    <button mat-button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button mat-button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 <form *ngIf="user">
-  <h2>User Details</h2>
+  <h2>{{ user.firstName }} {{ user.lastName }}</h2>
 
   <div>
     <label for="nId">N ID:</label>
@@ -56,13 +56,12 @@
     <input type="text" id="cityActual" [value]="user.cityActual" [readonly]="!isEditable" />
   </div>
 
-  <!-- Add a "Save" button -->
   <button type="button" (click)="toggleEditMode()">Toggle Edit Mode</button>
   <button *ngIf="isEditable" type="button" (click)="saveChanges()">Save Changes</button>
 
-  <!-- Add button to open the user account form -->
   <button type="button" (click)="openUserAccountFormDialog()">Add User Account</button>
 </form>
+
 <app-user-account-form-dialog
   *ngIf="showUserAccountFormDialog"
 ></app-user-account-form-dialog>

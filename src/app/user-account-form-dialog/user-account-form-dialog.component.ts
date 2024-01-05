@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UsersDataService } from '../users-data.service';
 
 @Component({
   selector: 'app-user-account-form-dialog',
@@ -16,6 +17,7 @@ export class UserAccountFormDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private usersDataService: UsersDataService,
     public dialogRef: MatDialogRef<UserAccountFormDialogComponent>
   ) {}
 
@@ -36,6 +38,10 @@ export class UserAccountFormDialogComponent implements OnInit {
   save(): void {
     if (this.accountForm.valid) {
       const accountData = this.accountForm.value;
+
+      // Save the user account data to the service and local storage
+      this.usersDataService.saveUserAccountData(accountData);
+
       this.dialogRef.close(accountData);
     }
   }
