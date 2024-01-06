@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
-import { User } from '../user.model';
-import { UsersDataService } from '../users-data.service';
+import { User } from '../../models/user.model';
+import { UsersDataService } from '../../services/users-data.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 

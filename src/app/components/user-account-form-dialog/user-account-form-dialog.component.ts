@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { UsersDataService } from '../users-data.service';
+import { UsersDataService } from '../../services/users-data.service';
 
 @Component({
   selector: 'app-user-account-form-dialog',

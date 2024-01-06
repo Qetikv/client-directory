@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -15,10 +14,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
-import { UserDetailsComponent } from './user-details/user-details.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { RouterModule } from '@angular/router';
-import { UserAccountFormDialogComponent } from './user-account-form-dialog/user-account-form-dialog.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserAccountFormDialogComponent } from './components/user-account-form-dialog/user-account-form-dialog.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { UserDialogComponent } from './components/user-dialog/user-dialog.component';
 
 @NgModule({
   declarations: [

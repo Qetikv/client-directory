@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { UsersDataService } from '../users-data.service';
-import { User } from '../user.model';
+import { User } from 'src/app/models/user.model';
+import { UsersDataService } from 'src/app/services/users-data.service';
+
 
 @Component({
   selector: 'app-user-dialog',

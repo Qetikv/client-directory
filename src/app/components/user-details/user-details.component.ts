@@ -2,8 +2,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UsersDataService } from '../users-data.service';
-import { User } from '../user.model';
+import { UsersDataService } from '../../services/users-data.service';
+import { User } from '../../models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UserAccountFormDialogComponent } from '../user-account-form-dialog/user-account-form-dialog.component';
 
