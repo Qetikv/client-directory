@@ -19,6 +19,8 @@ import { RouterModule } from '@angular/router';
 import { UserAccountFormDialogComponent } from './components/user-account-form-dialog/user-account-form-dialog.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserDialogComponent } from './components/user-dialog/user-dialog.component';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { UserDialogComponent } from './components/user-dialog/user-dialog.compon
     BrowserAnimationsModule,
     HttpClientModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    EffectsModule.forRoot([]),
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]
