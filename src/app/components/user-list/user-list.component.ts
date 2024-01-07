@@ -69,7 +69,8 @@ export class UserListComponent implements OnInit {
 
   private openUserDialog(): void {
     const dialogRef = this.dialog.open(UserDialogComponent, {
-      width: '500px', 
+      width: '800px', 
+      height: '600px'
     });
 
     dialogRef.afterClosed().subscribe(result => {

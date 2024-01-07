@@ -13,11 +13,11 @@ import { UsersDataService } from 'src/app/services/users-data.service';
 })
 export class UserDialogComponent implements OnInit {
   form!: FormGroup;
-  
+
   constructor(private fb: FormBuilder,
-              private elRef: ElementRef,
-              private usersDataService: UsersDataService,
-              public dialogRef: MatDialogRef<UserDialogComponent>) { }
+    private elRef: ElementRef,
+    private usersDataService: UsersDataService,
+    public dialogRef: MatDialogRef<UserDialogComponent>) { }
 
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class UserDialogComponent implements OnInit {
     });
   }
 
-    setFocusOnFirstInput(): void {
+  setFocusOnFirstInput(): void {
     const firstInput = this.elRef.nativeElement.querySelector('input');
     if (firstInput) {
       firstInput.focus();
@@ -104,6 +104,28 @@ export class UserDialogComponent implements OnInit {
     });
   }
 
+  getFirstNameErrorMessage() {
+    return this.form.get('firstName')?.hasError('required') ? "სახელი აუცილებელია" :
+      this.form.get('firstName')?.hasError('minlength') ? "სახელი უნდა იყოს მინიმუმ 2 სიმბოლო" :
+        this.form.get('firstName')?.hasError('maxlength') ? "სახელი უნდა იყოს მაქსიმუმ 50 სიმბოლოს" :
+          this.form.get('firstName')?.hasError('invalidCharacters') ? "სახელი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს" : ""
+  }
+
+  getLastNameLErrorMessage() {
+    return this.form.get('lastName')?.hasError('required') ? "სახელი აუცილებელია" :
+      this.form.get('lastName')?.hasError('minlength') ? "სახელი უნდა იყოს მინიმუმ 2 სიმბოლო" :
+        this.form.get('lastName')?.hasError('maxlength') ? "სახელი უნდა იყოს მაქსიმუმ 50 სიმბოლოს" :
+          this.form.get('lastName')?.hasError('invalidCharacters') ? "სახელი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს" : ""
+  }
+  getPrivateNumberErrorMessage() {
+    return this.form.get('privateNumber')?.hasError('required') ? "პირადი ნომერი აუცილებელია" :
+      this.form.get('privateNumber')?.hasError('pattern') ? "პირადი ნომერი უნდა იყოს 11 სიმბოლო" : ""
+  }
+
+  getPhoneNumberErrorMessage() {
+    return this.form.get('mobileNumber')?.hasError('required') ? "მობილური ნომერი აუცილებელია" :
+      this.form.get('mobileNumber')?.hasError('invalidMobileNumber') ? "მობილურის ნომერი არასწორია" : ""
+  }
 
   onSubmit(): void {
     if (this.form.valid) {

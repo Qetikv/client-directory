@@ -1,109 +1,76 @@
-<h2>კლიენტის დამატება</h2>
+<div class="container">
+    <h2>კლიენტის დამატება</h2>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
-    <mat-form-field class="form-field">
-        <input matInput formControlName="firstName" placeholder="სახელი" />
-        <mat-error *ngIf="form.get('firstName')?.hasError('required')">სახელი აუცილებელია</mat-error>
-        <mat-error *ngIf="form.get('firstName')?.hasError('minlength')">სახელი უნდა იყოს მინიმუმ 2 სიმბოლო</mat-error>
-        <mat-error *ngIf="form.get('firstName')?.hasError('maxlength')">სახელი უნდა იყოს მაქსიმუმ 50 სიმბოლო</mat-error>
-        <mat-error *ngIf="form.get('firstName')?.hasError('invalidCharacters')">სახელი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს</mat-error>
-    </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+        <section>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="firstName" placeholder="სახელი" />
+            <mat-error *ngIf="form.get('firstName')?.invalid">{{getFirstNameErrorMessage()}}</mat-error> 
+        </mat-form-field>
 
-    <mat-form-field class="form-field">
-        <input matInput formControlName="lastName" placeholder="გვარი" />
-        <mat-error *ngIf="form.get('lastName')?.hasError('required')">გვარი აუცილებელია</mat-error>
-        <mat-error *ngIf="form.get('lastName')?.hasError('minlength')">გვარი უნდა იყოს მინიმუმ 2 სიმბოლო</mat-error>
-        <mat-error *ngIf="form.get('lastName')?.hasError('maxlength')">გვარი უნდა იყოს მაქსიმუმ 50 სიმბოლო</mat-error>
-        <mat-error *ngIf="form.get('lastName')?.hasError('invalidCharacters')">გვარი უნდა შეიცავდეს მხოლოდ ინგლისურ და ქართულ ასოებს</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="lastName" placeholder="გვარი" />
+            <mat-error *ngIf="form.get('lastName')?.invalid">{{getLastNameLErrorMessage()}}</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="form-field">
-        <mat-label>სქესი</mat-label>
-        <mat-select formControlName="gender">
-            <mat-option value="male">კაცი</mat-option>
-            <mat-option value="female">ქალი</mat-option>
-        </mat-select>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <mat-label>სქესი</mat-label>
+            <mat-select formControlName="gender">
+                <mat-option value="male">კაცი</mat-option>
+                <mat-option value="female">ქალი</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-    <mat-form-field class="form-field">
-        <input matInput placeholder="პირადი ნომერი" formControlName="privateNumber" />
-        <mat-error *ngIf="form.get('privateNumber')?.hasError('required')">პირადი ნომერი აუცილებელია</mat-error>
-        <mat-error *ngIf="form.get('privateNumber')?.hasError('pattern')">პირადი ნომერი უნდა იყოს 11 სიმბოლო</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput placeholder="პირადი ნომერი" formControlName="privateNumber" />
+            <mat-error *ngIf="form.get('privateNumber')?.invalid">{{getPrivateNumberErrorMessage()}}</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="form-field">
-        <input matInput placeholder="მობილურის ნომერი" formControlName="mobileNumber" />
-        <mat-error *ngIf="form.get('mobileNumber')?.hasError('required')">მობილური ნომერი აუცილებელია</mat-error>
-        <mat-error *ngIf="form.get('mobileNumber')?.hasError('invalidMobileNumber')">მობილურის ნომერი არასწორია</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput placeholder="მობილურის ნომერი" formControlName="mobileNumber" />
+            <mat-error *ngIf="form.get('privateNumber')?.invalid">{{getPhoneNumberErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </section>
+        <h3>იურიდიული მისამართი</h3>
+        <section>
 
-    <h3>იურიდიული მისამართი</h3>
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="countryLegal" placeholder="ქვეყანა" />
-      <mat-error *ngIf="form.get('countryLegal')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
-    </mat-form-field>
-  
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="cityLegal" placeholder="ქალაქი" />
-      <mat-error *ngIf="form.get('cityLegal')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field>
-  
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="addressLegal" placeholder="მისამართი" />
-      <mat-error *ngIf="form.get('addressLegal')?.hasError('required')">მისამართი აუცილებელია</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="countryLegal" placeholder="ქვეყანა" />
+            <mat-error *ngIf="form.get('countryLegal')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+        </mat-form-field>
 
-    <h3>ფაქტიური მისამართი</h3>
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="countryActual" placeholder="ქვეყანა" />
-      <mat-error *ngIf="form.get('countryActual')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
-    </mat-form-field>
-  
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="cityActual" placeholder="ქალაქი" />
-      <mat-error *ngIf="form.get('cityActual')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field>
-  
-    <mat-form-field class="form-field" appearance="outline">
-      <input matInput formControlName="addressActual" placeholder="მისამართი" />
-      <mat-error *ngIf="form.get('addressActual')?.hasError('required')">მისამართი აუცილებელია</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="cityLegal" placeholder="ქალაქი" />
+            <mat-error *ngIf="form.get('cityLegal')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+        </mat-form-field>
 
-    <!-- <h3>იურიდიული მისამართი</h3>
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress" placeholder="ქვეყანა" />
-        <mat-error *ngIf="form.get('legalAddress.country')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
-    </mat-form-field>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="addressLegal" placeholder="მისამართი" />
+            <mat-error *ngIf="form.get('addressLegal')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+        </mat-form-field>
+    </section>
 
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress" placeholder="ქალაქი" />
-        <mat-error *ngIf="form.get('legalAddress.city')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field>
+        <h3>ფაქტიური მისამართი</h3>
+        <section>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="countryActual" placeholder="ქვეყანა" />
+            <mat-error *ngIf="form.get('countryActual')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="legalAddress" placeholder="მისამართი" />
-        <mat-error *ngIf="form.get('legalAddress.address')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field> -->
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="cityActual" placeholder="ქალაქი" />
+            <mat-error *ngIf="form.get('cityActual')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+        </mat-form-field>
 
-    <!-- <h3>ფაქტიური მისამართი</h3>
+        <mat-form-field class="form-field" appearance="outline">
+            <input matInput formControlName="addressActual" placeholder="მისამართი" />
+            <mat-error *ngIf="form.get('addressActual')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+        </mat-form-field>
+    </section>
+        <div class="button-container">
+            <button mat-raised-button color="primary" type="submit">დამატება</button>
+            <button mat-button (click)="closeDialog()">დახურვა</button>
+        </div>
 
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress" placeholder="ქვეყანა" />
-        <mat-error *ngIf="form.get('actualAddress.country')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress" placeholder="ქალაქი" />
-        <mat-error *ngIf="form.get('actualAddress.city')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="form-field" appearance="outline">
-        <input matInput formControlName="actualAddress" placeholder="მისამართი" />
-        <mat-error *ngIf="form.get('actualAddress.address')?.hasError('required')">მისამართი აუცილებელია</mat-error>
-    </mat-form-field> -->
-
-    <div class="button-container">
-        <button mat-raised-button type="submit">Submit</button>
-        <button mat-button (click)="closeDialog()">Close</button>
-    </div>
-</form>
+    </form>
+</div>
