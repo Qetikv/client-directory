@@ -59,3 +59,6 @@ export const selectFeature = createFeatureSelector<AppState>('appFeature');
 
 export const selectUsers = createSelector(selectFeature, state => selectAllUsers(state));
 export const selectIsDialogOpen = createSelector(selectFeature, selectDialogState);
+
+export const selectUSerById = (id: number) =>
+    createSelector(selectUsers, (users) => users.find(user => user.nId === id));
