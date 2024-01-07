@@ -33,7 +33,7 @@
     <ng-container matColumnDef="delete">
       <th mat-header-cell *matHeaderCellDef>Delete</th>
       <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="warn" (click)="deleteUser(user.nId)">
+        <button mat-icon-button color="warn" (click)="confirmDelete(user.nId, $event)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

@@ -36,12 +36,16 @@ export const closeDialog = createAction('[Dialog] Close Dialog');
 export const setUsers = createAction('[User] Set Users', props<{ users: User[] }>());
 export const fetchUsers = createAction('[User] Fetch Users');
 export const fetchUsersError = createAction('[User] Fetch Users Error', props<{ error: any }>());
+export const addUserData = createAction('[User] Add User Data', props<{ user: User }>());
+export const addUserSuccess = createAction('[User] Add User Success', props<{ user: User }>());
+export const addUserFailure = createAction('[User] Add User Failure', props<{ error: any }>());
 
 export const appReducer = createReducer(
   initialState,
   on(openDialog, state => ({ ...state, isDialogOpen: true })),
   on(closeDialog, state => ({ ...state, isDialogOpen: false })),
   on(setUsers, (state, { users }) => ({ ...state, users: userAdapter.setAll(users, state.users) })), 
+  on(userActions.addUserSuccess, (state, { user }) => ({ ...state, users: userAdapter.addOne(user, state.users) })),
 );
 
 

@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { addUserData } from 'src/app/app.state';
 import { User } from 'src/app/models/user.model';
 import { UsersDataService } from 'src/app/services/users-data.service';
-
 
 @Component({
   selector: 'app-user-dialog',
@@ -16,6 +17,7 @@ export class UserDialogComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private elRef: ElementRef,
+    private store: Store,
     private usersDataService: UsersDataService,
     public dialogRef: MatDialogRef<UserDialogComponent>) { }
 
@@ -126,19 +128,19 @@ export class UserDialogComponent implements OnInit {
     return this.form.get('mobileNumber')?.hasError('required') ? "მობილური ნომერი აუცილებელია" :
       this.form.get('mobileNumber')?.hasError('invalidMobileNumber') ? "მობილურის ნომერი არასწორია" : ""
   }
-
   onSubmit(): void {
     if (this.form.valid) {
       const userData: User = {
         nId: this.generateUniqueId(),
         ...this.form.value,
       };
-
-      // Make the HTTP POST request to save user data to the backend
+  
       this.usersDataService.addUserData(userData).subscribe(
         (response) => {
           console.log('User added successfully:', response);
-          this.usersDataService.addUserData(response);
+    
+          this.store.dispatch(addUserData({ user: response }));
+  
           this.dialogRef.close();
         },
         (error) => {
