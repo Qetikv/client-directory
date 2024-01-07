@@ -44,6 +44,7 @@ export class UserDetailsComponent implements OnInit {
       
       this.store.select(selectUSerById(this.userId)).subscribe((user) => {
           this.user = user;
+          //here we will check if user is not undefined we will fill the form else get user from backent and then fill the form
           this.fillUserForm(this.user);
       })
 
