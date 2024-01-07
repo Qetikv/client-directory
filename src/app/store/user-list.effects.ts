@@ -25,4 +25,16 @@ export class UserEffects {
       )
     )
   );
+  addUser$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(userActions.addUserData),
+    mergeMap((action) =>
+      this.usersDataService.addUserData(action.user).pipe(
+        map((user) => userActions.addUserSuccess({ user })),
+        catchError((error) => of(userActions.addUserFailure({ error })))
+      )
+    )
+  )
+);
+  
 }

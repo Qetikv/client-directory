@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
+import { Store } from '@ngrx/store';
+import { addUserSuccess } from '../app.state';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +18,7 @@ export class UsersDataService {
 
   users$: Observable<User[]> = this.usersSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
   private loadUsersFromLocalStorage(): User[] {
     const storedUsers = localStorage.getItem('users');
@@ -36,11 +38,11 @@ export class UsersDataService {
   }
 
   addUserData(user: User): Observable<User> {
-    return this.http.post<User>('http://localhost:3000/api/users', user).pipe(
+    return this.http.post<User>('http://localhost:3000/users', user).pipe(
       tap((addedUser) => {
         this.users = [...this.users, addedUser];
-        this.saveUsersToLocalStorage(this.users);
         this.usersSubject.next([...this.users]);
+        this.store.dispatch(addUserSuccess({ user: addedUser }));
       })
     );
   }
@@ -52,7 +54,7 @@ export class UsersDataService {
       page: this.currentPage.toString(),
       limit: this.usersPerPage.toString(),
     };
-    return this.http.get<User[]>('http://localhost:3000/api/users', { params }).pipe(
+    return this.http.get<User[]>('http://localhost:3000/users', { params }).pipe(
       catchError((error) => {
         console.error('Error fetching users:', error);
         return throwError(error);
@@ -75,26 +77,24 @@ export class UsersDataService {
     this.users = [];
     this.usersSubject.next([]);
   }
+
   deleteUserById(userId: number): Observable<void> {
-    const apiUrl = `http://localhost:3000/api/users/${userId}`;
+    const apiUrl = `http://localhost:3000/users/${userId}`;
     return this.http.delete<void>(apiUrl).pipe(
       tap(() => {
-        // Update the local users array
         this.users = this.users.filter(user => user.nId !== userId);
-        // Save the updated users to local storage
-        this.saveUsersToLocalStorage(this.users);
-        // Notify subscribers about the change
         this.usersSubject.next([...this.users]);
+        console.log(`User with ID ${userId} deleted successfully`);
       }),
       catchError((error) => {
-        console.error('Error deleting user:', error);
+        console.error(`Error deleting user with ID ${userId}:`, error);
         return throwError(error);
       })
     );
   }
-
+  
   updateUser(userId: number, updatedUser: User): Observable<User> {
-    const apiUrl = `http://localhost:3000/api/users/${userId}`;
+    const apiUrl = `http://localhost:3000/users/${userId}`;
     return this.http.put<User>(apiUrl, updatedUser).pipe(
       tap((user) => {
       }),
