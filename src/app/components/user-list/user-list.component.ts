@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { UsersDataService } from 'src/app/services/users-data.service';
-import { AppState, fetchUsers, openDialog, selectUsers, setUsers } from 'src/app/app.state';
+import { AppState, closeDialog, fetchUsers, openDialog, selectIsDialogOpen, selectUsers, setUsers } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-list',
@@ -20,6 +20,8 @@ export class UserListComponent implements OnInit {
   users: MatTableDataSource<User> = new MatTableDataSource<User>();
   displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender', 'delete', 'edit'];
   searchText: string = '';
+  isDialogOpen!: boolean;
+
 
   currentPage: number = 1;
   usersPerPage: number = 10;
@@ -35,37 +37,52 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    // Dispatch the fetchUsers action to initially load users
     this.store.dispatch(fetchUsers());
-    
+
     this.store.select(selectUsers).pipe(takeUntil(this.destroy$)).subscribe(
       (users) => {
-        console.log(users)
-        // this.userList = users;
-        // this.applySearchFilter();
-        // this.calculateTotalPages();
-        // this.paginateUsers();
+        console.log(users);
+        this.userList = users;
+        this.applySearchFilter();
+        this.calculateTotalPages();
+        this.paginateUsers();
       },
       (error) => {
         console.error('Error fetching users:', error);
       }
     );
 
-  }
+    this.store.select(selectIsDialogOpen).pipe(takeUntil(this.destroy$)).subscribe(
+      (isDialogOpen) => {
+        this.isDialogOpen = isDialogOpen;
 
+        if (isDialogOpen) {
+          this.openUserDialog();
+        }
+      }
+    );
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  private openUserDialog(): void {
+    const dialogRef = this.dialog.open(UserDialogComponent, {
+      width: '500px', 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.store.dispatch(closeDialog());
+    });
+  }
+  
   applySearchFilter() {
     this.users.data = this.userList.filter((user) => this.isMatchingSearch(user, this.searchText));
   }
 
   applyFilter() {
     this.currentPage = 1;
-    // Dispatch the fetchUsers action instead of calling this.fetchUsers()
     this.store.dispatch(fetchUsers());
   }
 
@@ -77,7 +94,6 @@ export class UserListComponent implements OnInit {
   }
 
   openDialog(): void {
-    // Dispatch the openDialog action instead of calling this.openDialog()
     this.store.dispatch(openDialog());
   }
 
@@ -85,7 +101,6 @@ export class UserListComponent implements OnInit {
     this.usersDataService.deleteUserById(userId).subscribe(
       () => {
         console.log('User deleted successfully');
-        // Dispatch the fetchUsers action instead of calling this.fetchUsers()
         this.store.dispatch(fetchUsers());
       },
       (error) => {

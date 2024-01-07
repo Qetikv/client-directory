@@ -48,7 +48,9 @@ import { appReducer } from './app.state';
     HttpClientModule,
     MatIconModule,
     RouterModule,
-    StoreModule.forRoot({ Appstate: appReducer }),
+    StoreModule.forFeature( 'appFeature', appReducer),
+    StoreModule.forRoot({ /* your reducers here */ }),
+
     EffectsModule.forRoot([UserEffects]),
   ],
   providers: [],

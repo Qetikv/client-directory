@@ -19,8 +19,8 @@ export class UserEffects {
       ofType(userActions.fetchUsers),
       mergeMap(() =>
         this.usersDataService.fetchUsers().pipe(
-          map((users) => userActions.setUsers({  users })),
-          catchError((error) => of(userActions.fetchUsersError({ error })))
+          map(users => userActions.setUsers({ users })),
+          catchError(error => of(userActions.fetchUsersError({ error })))
         )
       )
     )
