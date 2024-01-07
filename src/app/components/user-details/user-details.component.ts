@@ -9,6 +9,7 @@ import { UserAccountFormDialogComponent } from '../user-account-form-dialog/user
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { customMobileNumberValidator, customNameValidator, getFirstNameErrorMessage, getLastNameLErrorMessage, getPhoneNumberErrorMessage, getPrivateNumberErrorMessage } from '../utils/userValidators';
 import { Store } from '@ngrx/store';
+import { selectUSerById } from 'src/app/app.state';
 // import { selectUSerById } from 'src/app/app.state';
 
 @Component({
@@ -41,10 +42,10 @@ export class UserDetailsComponent implements OnInit {
       this.userId = parseInt(params['userId'], 10);
       this.createForm();
       
-    //   this.store.select(selectUSerById(this.userId)).subscribe((user) => {
-    //       this.user = user;
-    //       this.fillUserForm(this.user);
-    //   })
+      this.store.select(selectUSerById(this.userId)).subscribe((user) => {
+          this.user = user;
+          this.fillUserForm(this.user);
+      })
 
     });
 
