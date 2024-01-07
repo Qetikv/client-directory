@@ -21,6 +21,8 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { UserDialogComponent } from './components/user-dialog/user-dialog.component';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { UserEffects } from './store/user-list.effects';
+import { appReducer } from './app.state';
 
 @NgModule({
   declarations: [
@@ -46,8 +48,8 @@ import { StoreModule } from '@ngrx/store';
     HttpClientModule,
     MatIconModule,
     RouterModule,
-    EffectsModule.forRoot([]),
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({ Appstate: appReducer }),
+    EffectsModule.forRoot([UserEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]

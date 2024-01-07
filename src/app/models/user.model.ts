@@ -5,8 +5,6 @@ export interface User {
     gender: string;
     privateNumber: string;
     mobileNumber: string;
-    legalAddress: Address;
-    actualAddress: Address;
     addressActual: string;
     cityActual: string;
     countryActual: string;

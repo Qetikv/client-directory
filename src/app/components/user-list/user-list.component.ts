@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
-import { User } from '../../models/user.model';
-import { UsersDataService } from '../../services/users-data.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { User } from 'src/app/models/user.model';
+import { UsersDataService } from 'src/app/services/users-data.service';
+import { AppState, fetchUsers, openDialog, selectUsers, setUsers } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-list',
@@ -21,28 +25,38 @@ export class UserListComponent implements OnInit {
   usersPerPage: number = 10;
   totalPages: number = 1;
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
+    private store: Store<AppState>,
     private usersDataService: UsersDataService
   ) {}
 
   ngOnInit() {
-    this.fetchUsers();
-  }
 
-  fetchUsers() {
-    this.usersDataService.users$.subscribe(
+    // Dispatch the fetchUsers action to initially load users
+    this.store.dispatch(fetchUsers());
+    
+    this.store.select(selectUsers).pipe(takeUntil(this.destroy$)).subscribe(
       (users) => {
-        this.userList = users;
-        this.applySearchFilter();
-        this.calculateTotalPages();
-        this.paginateUsers();
+        console.log(users)
+        // this.userList = users;
+        // this.applySearchFilter();
+        // this.calculateTotalPages();
+        // this.paginateUsers();
       },
       (error) => {
         console.error('Error fetching users:', error);
       }
     );
+
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   applySearchFilter() {
@@ -51,7 +65,8 @@ export class UserListComponent implements OnInit {
 
   applyFilter() {
     this.currentPage = 1;
-    this.fetchUsers();
+    // Dispatch the fetchUsers action instead of calling this.fetchUsers()
+    this.store.dispatch(fetchUsers());
   }
 
   changePage(page: number) {
@@ -62,21 +77,16 @@ export class UserListComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(UserDialogComponent, {
-      width: '600px',
-      height: '600px',
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      this.fetchUsers();
-    });
+    // Dispatch the openDialog action instead of calling this.openDialog()
+    this.store.dispatch(openDialog());
   }
 
   deleteUser(userId: number): void {
     this.usersDataService.deleteUserById(userId).subscribe(
       () => {
         console.log('User deleted successfully');
-        this.fetchUsers();
+        // Dispatch the fetchUsers action instead of calling this.fetchUsers()
+        this.store.dispatch(fetchUsers());
       },
       (error) => {
         console.error('Error deleting user:', error);
