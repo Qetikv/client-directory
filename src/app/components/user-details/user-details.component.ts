@@ -6,6 +6,10 @@ import { UsersDataService } from '../../services/users-data.service';
 import { User } from '../../models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UserAccountFormDialogComponent } from '../user-account-form-dialog/user-account-form-dialog.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { customMobileNumberValidator, customNameValidator, getFirstNameErrorMessage, getLastNameLErrorMessage, getPhoneNumberErrorMessage, getPrivateNumberErrorMessage } from '../utils/userValidators';
+import { Store } from '@ngrx/store';
+// import { selectUSerById } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-details',
@@ -18,20 +22,85 @@ export class UserDetailsComponent implements OnInit {
   isEditable = false; // Track whether the form is in edit mode
   showUserAccountFormDialog = false; // Track whether to show the user account form dialog
 
+  form!: FormGroup;
+
+  getFirstNameErrorMessage = () => getFirstNameErrorMessage(this.form)
+  getLastNameLErrorMessage = () => getLastNameLErrorMessage((this.form)) 
+  getPrivateNumberErrorMessage = () => getPrivateNumberErrorMessage(this.form)
+  getPhoneNumberErrorMessage = () => getPhoneNumberErrorMessage(this.form) 
+  
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private usersDataService: UsersDataService
-  ) {}
+    private fb: FormBuilder,
+    private store : Store,
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.userId = parseInt(params['userId'], 10);
+      this.createForm();
+      
+    //   this.store.select(selectUSerById(this.userId)).subscribe((user) => {
+    //       this.user = user;
+    //       this.fillUserForm(this.user);
+    //   })
 
-      if (this.userId) {
-        this.user = this.usersDataService.getUserById(this.userId);
-      }
     });
+
+
+  }
+
+  createForm(){
+    this.form = this.fb.group({
+      nId:["", [ Validators.required ]],
+      firstName: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          customNameValidator
+        ]
+      ],
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        customNameValidator
+      ]],
+      gender: ['', Validators.required],
+      privateNumber: ['', [
+        Validators.required, Validators.pattern(/^\d{11}$/)],
+      ],
+      mobileNumber: ['', [
+        Validators.required, customMobileNumberValidator]
+      ],
+      countryLegal: ['', Validators.required],
+      cityLegal: ['', Validators.required],
+      addressLegal: ['', Validators.required],
+      countryActual: ['', Validators.required],
+      cityActual: ['', Validators.required],
+      addressActual: ['', Validators.required],
+    })
+  }
+  fillUserForm(user: User | undefined) {
+    if (user) {
+      this.form.setValue({
+        nId: user.nId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        gender: user.gender,
+        privateNumber: user.privateNumber,
+        mobileNumber: user.mobileNumber,
+        addressActual: user.addressActual,
+        cityActual: user.cityActual,
+        countryActual: user.countryActual,
+        addressLegal: user.addressLegal,
+        cityLegal: user.cityLegal,
+        countryLegal: user.countryLegal
+      })
+    }
   }
 
   // Toggle between edit and view mode
@@ -56,18 +125,18 @@ export class UserDetailsComponent implements OnInit {
       data: { user: this.user }, // Pass user data to the dialog
     });
 
-//     dialogRef.afterClosed().subscribe((result) => {
-//       if (result) {
-//         // Handle the result (saved data) here if needed
-//         console.log('User Account Form Dialog closed with result:', result);
-//         // Update the user object with the new account data
-//         if (!this.user?.accounts) {
-//           this.user!.accounts = [];
-//         }
-//         this.user!.accounts.push(result);
-//       }
-// // 
-//       this.showUserAccountFormDialog = false;
-//     });
+    //     dialogRef.afterClosed().subscribe((result) => {
+    //       if (result) {
+    //         // Handle the result (saved data) here if needed
+    //         console.log('User Account Form Dialog closed with result:', result);
+    //         // Update the user object with the new account data
+    //         if (!this.user?.accounts) {
+    //           this.user!.accounts = [];
+    //         }
+    //         this.user!.accounts.push(result);
+    //       }
+    // // 
+    //       this.showUserAccountFormDialog = false;
+    //     });
   }
 }

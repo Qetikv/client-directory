@@ -1,36 +1,61 @@
 /* Add your styles here */
 
 form {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width:800px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+section {
+  display: flex;
+  flex-direction: row;
+
+  &.addresses{
+    display: flex;
+
+    .actual{
+      display: flex;
+      flex-direction: column;
+
+    }
+    .legal{
+      display: flex;
+      flex-direction: column;
+
+    }
   }
-  
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
-  div {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
-  }
-  
-  /* Optional: Add more styles based on your requirements */
-  
+
+}
+
+.buttons{
+  display: flex;
+  width:100%;
+  justify-content: space-between;
+}

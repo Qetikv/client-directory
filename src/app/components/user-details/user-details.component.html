@@ -1,65 +1,103 @@
 <form *ngIf="user">
   <h2>{{ user.firstName }} {{ user.lastName }}</h2>
 
-  <div>
-    <label for="nId">N ID:</label>
-    <input type="text" id="nId" [value]="user.nId" readonly />
-  </div>
+  <form [formGroup]="form" class="form-container">
+    <section>
+      <mat-form-field class="form-field" appearance="outline" >
+        <mat-label>მომხმარებლის ნომერი</mat-label>
+        <input matInput formControlName="nId" placeholder="მომხმარებლის ნომერი" readonly/>
+    </mat-form-field>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>სახელი</mat-label>
+        <input matInput formControlName="firstName" placeholder="სახელი" [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('firstName')?.invalid">{{getFirstNameErrorMessage()}}</mat-error> 
+    </mat-form-field>
 
-  <div>
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" [value]="user.firstName" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>გვარი</mat-label>
+        <input matInput formControlName="lastName" placeholder="გვარი"  [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('lastName')?.invalid">{{getLastNameLErrorMessage()}}</mat-error>
+    </mat-form-field>
 
-  <div>
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" [value]="user.lastName" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline" class="readonly-wrapper">
+        <mat-label>სქესი</mat-label>
+        <mat-select formControlName="gender">
+            <mat-option value="male">კაცი</mat-option>
+            <mat-option value="female">ქალი</mat-option>
+        </mat-select>
+    </mat-form-field>
 
-  <div>
-    <label for="gender">Gender:</label>
-    <input type="text" id="gender" [value]="user.gender" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>პირადი ნომერი</mat-label>
+        <input matInput placeholder="პირადი ნომერი" formControlName="privateNumber" [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('privateNumber')?.invalid">{{getPrivateNumberErrorMessage()}}</mat-error>
+    </mat-form-field>
 
-  <div>
-    <label for="privateNumber">Private Number:</label>
-    <input type="text" id="privateNumber" [value]="user.privateNumber" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>მობილურის ნომერი</mat-label>
 
-  <div>
-    <label for="mobileNumber">Mobile Number:</label>
-    <input type="text" id="mobileNumber" [value]="user.mobileNumber" [readonly]="!isEditable" />
-  </div>
+        <input matInput placeholder="მობილურის ნომერი" formControlName="mobileNumber" [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('privateNumber')?.invalid">{{getPhoneNumberErrorMessage()}}</mat-error>
+    </mat-form-field>
+</section>
+<section class="addresses">
+    <section class="legal">
+      <h3>იურიდიული მისამართი</h3>
 
-  <div>
-    <label for="countryLegal">Country (Legal):</label>
-    <input type="text" id="countryLegal" [value]="user.countryLegal" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>ქვეყანა</mat-label>
+        <input matInput formControlName="countryLegal" placeholder="ქვეყანა"  [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('countryLegal')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+    </mat-form-field>
 
-  <div>
-    <label for="cityLegal">City (Legal):</label>
-    <input type="text" id="cityLegal" [value]="user.cityLegal" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>ქალაქი</mat-label>
 
-  <div>
-    <label for="addressLegal">Address (Legal):</label>
-    <input type="text" id="addressLegal" [value]="user.addressLegal" [readonly]="!isEditable" />
-  </div>
+        <input matInput formControlName="cityLegal" placeholder="ქალაქი" [readonly]="!isEditable" />
+        <mat-error *ngIf="form.get('cityLegal')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+    </mat-form-field>
 
-  <div>
-    <label for="countryActual">Country (Actual):</label>
-    <input type="text" id="countryActual" [value]="user.countryActual" [readonly]="!isEditable" />
-  </div>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>მისამართი</mat-label>
 
-  <div>
-    <label for="cityActual">City (Actual):</label>
-    <input type="text" id="cityActual" [value]="user.cityActual" [readonly]="!isEditable" />
-  </div>
+        <input matInput formControlName="addressLegal" placeholder="მისამართი" [readonly]="!isEditable" />
+        <mat-error *ngIf="form.get('addressLegal')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+    </mat-form-field>
+</section>
 
-  <button type="button" (click)="toggleEditMode()">Toggle Edit Mode</button>
-  <button *ngIf="isEditable" type="button" (click)="saveChanges()">Save Changes</button>
+    <section class="actual">
+      <h3>ფაქტიური მისამართი</h3>
 
-  <button type="button" (click)="openUserAccountFormDialog()">Add User Account</button>
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>ქვეყანა</mat-label>
+
+        <input matInput formControlName="countryActual" placeholder="ქვეყანა"  [readonly]="!isEditable"/>
+        <mat-error *ngIf="form.get('countryActual')?.hasError('required')">ქვეყანა აუცილებელია</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>ქალაქი</mat-label>
+
+        <input matInput formControlName="cityActual" placeholder="ქალაქი" [readonly]="!isEditable" />
+        <mat-error *ngIf="form.get('cityActual')?.hasError('required')">ქალაქი აუცილებელია</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>მისამართი</mat-label>
+
+        <input matInput formControlName="addressActual" placeholder="მისამართი" [readonly]="!isEditable" />
+        <mat-error *ngIf="form.get('addressActual')?.hasError('required')">მისამართი აუცილებელია</mat-error>
+    </mat-form-field>
+</section>
+</section>
+  
+
+<div class="buttons">
+  <button   mat-raised-button color="primary" type="button" (click)="toggleEditMode()" *ngIf="!isEditable">ცვლილება</button>
+  <button   mat-raised-button color="primary" *ngIf="isEditable" type="button" (click)="saveChanges()">შენახვა</button>
+
+  <button type="button" (click)="openUserAccountFormDialog()" mat-stroked-button color="primary">ანგარიშის დამატება</button>
+</div>
 </form>
 
 <app-user-account-form-dialog
