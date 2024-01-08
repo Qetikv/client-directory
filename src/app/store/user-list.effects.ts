@@ -1,7 +1,7 @@
 // src/app/store/user.effects.ts
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UsersDataService } from '../services/users-data.service';
 import * as userActions from '../app.state';
@@ -21,6 +21,17 @@ export class UserEffects {
         this.usersDataService.fetchUsers().pipe(
           map(users => userActions.setUsers({ users })),
           catchError(error => of(userActions.fetchUsersError({ error })))
+        )
+      )
+    )
+  );
+  setSearchText$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.setSearchText),
+      switchMap(({ searchText }) =>
+        this.usersDataService.fetchUsers().pipe(
+          map((users) => userActions.setSearchResults({ users })),
+          catchError((error) => of(userActions.searchError({ error })))
         )
       )
     )

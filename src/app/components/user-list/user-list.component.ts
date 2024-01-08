@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { UsersDataService } from 'src/app/services/users-data.service';
-import { AppState, closeDialog, fetchUsers, openDialog, selectIsDialogOpen, selectUsers, setUsers } from 'src/app/app.state';
+import { AppState, closeDialog, fetchUsers, openDialog, selectIsDialogOpen, selectUsers, setSearchText, setUsers } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-list',
@@ -45,6 +45,7 @@ export class UserListComponent implements OnInit {
         (users) => {
           console.log(users);
           this.userList = users;
+          this.store.dispatch(setSearchText({ searchText: this.searchText }));
           this.applySearchFilter();
           this.calculateTotalPages();
           this.paginateUsers();
@@ -83,12 +84,17 @@ export class UserListComponent implements OnInit {
   }
 
   applySearchFilter() {
-    this.users.data = this.userList.filter((user) =>
+    const filteredUsers = this.userList.filter(user =>
       this.isMatchingSearch(user, this.searchText)
     );
+  
+    this.totalPages = Math.ceil(filteredUsers.length / this.usersPerPage);
+    this.paginateUsers(filteredUsers);
+    this.saveFilteredUsersToLocalStorage(filteredUsers);
+  }
 
-    this.calculateTotalPages();
-    this.paginateUsers();
+  private saveFilteredUsersToLocalStorage(filteredUsers: User[]): void {
+    localStorage.setItem('filteredUsers', JSON.stringify(filteredUsers));
   }
 
   applyFilter() {
@@ -132,9 +138,10 @@ export class UserListComponent implements OnInit {
     this.totalPages = Math.ceil(this.userList.length / this.usersPerPage);
   }
 
-  private paginateUsers() {
+  private paginateUsers(filteredUsers?: User[]) {
+    const data = filteredUsers || this.userList;
     const startIndex = (this.currentPage - 1) * this.usersPerPage;
     const endIndex = startIndex + this.usersPerPage;
-    this.users.data = this.userList.slice(startIndex, endIndex);
+    this.users.data = data.slice(startIndex, endIndex);
   }
 }

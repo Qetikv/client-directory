@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Store } from '@ngrx/store';
-import { addUserSuccess } from '../app.state';
+import { addUserSuccess, setSearchResults } from '../app.state';
 import { UserAccount } from '../models/bank_account.model';
 import * as userAccountActions from '../store/actions/bank-account.actions';
 
@@ -62,13 +62,25 @@ export class UsersDataService {
       page: this.currentPage.toString(),
       limit: this.usersPerPage.toString(),
     };
-    return this.http.get<User[]>('http://localhost:3000/users', { params }).pipe(
-      catchError((error) => {
-        console.error('Error fetching users:', error);
-        return throwError(error);
-      })
-    );
-  }
+
+    const storedResults = localStorage.getItem('searchResults');
+  
+    if (storedResults) {
+      const parsedResults: User[] = JSON.parse(storedResults);
+      this.store.dispatch(setSearchResults({ users: parsedResults }));
+      return of(parsedResults);
+    } else {
+      return this.http.get<User[]>('http://localhost:3000/users', { params }).pipe(
+        tap((users) => {
+          localStorage.setItem('searchResults', JSON.stringify(users));
+          this.store.dispatch(setSearchResults({ users }));
+        }),
+        catchError((error) => {
+          console.error('Error fetching users:', error);
+          return throwError(error);
+        })
+      );
+    }}
   getUserAccounts(userId: number): any[] {
     console.log('Fetching user accounts for user with ID:', userId);
 
