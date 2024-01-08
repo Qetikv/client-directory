@@ -13,27 +13,26 @@
   border-radius: 4px;
 }
 
-/* Search Bar and Filter Button */
 .search-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-
-  .search-bar {
-    width: 100%;
-  }
-
-  .search-button {
-    width: 25%;
-    background-color: #2196F3;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
 }
+
+.search-bar {
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+.search-button {
+  width: 25%;
+  background-color: #2196F3;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
 
 .mat-elevation-z8 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
