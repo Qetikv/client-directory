@@ -49,7 +49,7 @@ import { appReducer } from './app.state';
     MatIconModule,
     RouterModule,
     StoreModule.forFeature( 'appFeature', appReducer),
-    StoreModule.forRoot({ /* your reducers here */ }),
+    StoreModule.forRoot({ }),
 
     EffectsModule.forRoot([UserEffects]),
   ],
