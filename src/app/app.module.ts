@@ -22,6 +22,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { UserEffects } from './store/user-list.effects';
 import { appReducer } from './app.state';
+import { userAccountReducer } from './store/reducers/bank-account.reducer';
+import { UserAccountEffects } from './store/bank-account.effects';
 
 @NgModule({
   declarations: [
@@ -48,9 +50,8 @@ import { appReducer } from './app.state';
     MatIconModule,
     RouterModule,
     StoreModule.forFeature('appFeature', appReducer),
-    StoreModule.forRoot({}),
-
-    EffectsModule.forRoot([UserEffects]),
+    StoreModule.forRoot({ userAccounts: userAccountReducer }),
+    EffectsModule.forRoot([UserEffects, UserAccountEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]

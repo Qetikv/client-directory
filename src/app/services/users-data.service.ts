@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Store } from '@ngrx/store';
 import { addUserSuccess } from '../app.state';
+import { UserAccount } from '../models/bank_account.model';
+import * as userAccountActions from '../store/actions/bank-account.actions';
+
 
 @Injectable({
   providedIn: 'root',
@@ -29,12 +32,17 @@ export class UsersDataService {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
-  saveUserAccountData(accountData: any): void {
-    console.log('Saving user account data:', accountData);
-    const storedAccounts = localStorage.getItem('userAccounts');
-    const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
-    accounts.push(accountData);
-    localStorage.setItem('userAccounts', JSON.stringify(accounts));
+  // saveUserAccountData(accountData: any): void {
+  //   console.log('Saving user account data:', accountData);
+  //   const storedAccounts = localStorage.getItem('userAccounts');
+  //   const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
+  //   accounts.push(accountData);
+  //   localStorage.setItem('userAccounts', JSON.stringify(accounts));
+  // }
+
+  saveUserAccountData(userAccount: UserAccount): void {
+    this.store.dispatch(userAccountActions.addUserAccount( { account: userAccount}));
+
   }
 
   addUserData(user: User): Observable<User> {
