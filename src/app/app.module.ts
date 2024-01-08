@@ -50,7 +50,7 @@ import { userAccountReducer } from './store/reducers/bank-account.reducer';
     RouterModule,
     StoreModule.forFeature('appFeature', appReducer),
     StoreModule.forRoot({ userAccounts: userAccountReducer }),
-    // EffectsModule.forRoot([UserEffects, UserAccountEffects]),
+    EffectsModule.forRoot([UserEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]
