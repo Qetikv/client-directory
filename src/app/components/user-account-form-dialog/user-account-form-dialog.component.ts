@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UsersDataService } from '../../services/users-data.service';
+import { UserAccount, dropdownOptions } from 'src/app/models/bank_account.model';
 
 @Component({
   selector: 'app-user-account-form-dialog',
@@ -10,10 +11,9 @@ import { UsersDataService } from '../../services/users-data.service';
 })
 export class UserAccountFormDialogComponent implements OnInit {
   accountForm!: FormGroup;
-    // Options for dropdowns
-    accountTypes = ['current', 'savings', 'accumulation'];
-    currencies = ['GEL', 'dollar', 'euro'];
-    accountStatusOptions = ['active', 'closed'];
+  accountTypes = dropdownOptions.accountTypes;
+  currencies = dropdownOptions.currencies;
+  accountStatusOptions = dropdownOptions.accountStatusOptions;
 
   constructor(
     private fb: FormBuilder,
@@ -37,9 +37,8 @@ export class UserAccountFormDialogComponent implements OnInit {
 
   save(): void {
     if (this.accountForm.valid) {
-      const accountData = this.accountForm.value;
+      const accountData: UserAccount = this.accountForm.value;
 
-      // Save the user account data to the service and local storage
       this.usersDataService.saveUserAccountData(accountData);
 
       this.dialogRef.close(accountData);

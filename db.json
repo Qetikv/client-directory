@@ -179,5 +179,15 @@
       "cityActual": "თბილისი",
       "addressActual": "ვაჟ",
       "id": 12
-    }
-  ]}
+    }],
+    "bank_accounts": [
+      {
+        "nId": 1704653612882,
+        "customerNumber": 17046533612882,
+        "accountType": "Savings",
+        "currency": "USD",
+        "accountStatus": "ACTIVE"
+      }
+    ]
+}
+

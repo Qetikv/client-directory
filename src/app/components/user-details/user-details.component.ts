@@ -20,8 +20,8 @@ import { selectUserById } from 'src/app/app.state';
 export class UserDetailsComponent implements OnInit {
   user: User | undefined;
   userId: number | null = null;
-  isEditable = false; // Track whether the form is in edit mode
-  showUserAccountFormDialog = false; // Track whether to show the user account form dialog
+  isEditable = false; 
+  showUserAccountFormDialog = false; 
 
   form!: FormGroup;
 
@@ -110,21 +110,17 @@ export class UserDetailsComponent implements OnInit {
     this.isEditable = !this.isEditable;
   }
 
-  // Save changes to the user object
   saveChanges(): void {
-    // Add logic to save changes to the backend or update the local user data
     console.log('Saving changes:', this.user);
-    // You can make an HTTP request to update the user data on the server here
-    // For simplicity, this example just logs the changes to the console
-    this.isEditable = false; // Switch back to view mode after saving
+    
+    this.isEditable = false; 
   }
 
-  // Open the user account form dialog
   openUserAccountFormDialog(): void {
     const dialogRef = this.dialog.open(UserAccountFormDialogComponent, {
-      width: '600px',
+      width: '900px',
       height: '600px',
-      data: { user: this.user }, // Pass user data to the dialog
+      data: { user: this.user }, 
     });
 
     //     dialogRef.afterClosed().subscribe((result) => {
