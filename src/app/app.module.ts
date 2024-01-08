@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -48,8 +47,8 @@ import { appReducer } from './app.state';
     HttpClientModule,
     MatIconModule,
     RouterModule,
-    StoreModule.forFeature( 'appFeature', appReducer),
-    StoreModule.forRoot({ }),
+    StoreModule.forFeature('appFeature', appReducer),
+    StoreModule.forRoot({}),
 
     EffectsModule.forRoot([UserEffects]),
   ],

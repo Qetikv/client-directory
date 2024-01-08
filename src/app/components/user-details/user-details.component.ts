@@ -47,10 +47,7 @@ export class UserDetailsComponent implements OnInit {
           //here we will check if user is not undefined we will fill the form else get user from backent and then fill the form
           this.fillUserForm(this.user);
       })
-
     });
-
-
   }
 
   createForm(){
@@ -105,14 +102,12 @@ export class UserDetailsComponent implements OnInit {
     }
   }
 
-  // Toggle between edit and view mode
   toggleEditMode(): void {
     this.isEditable = !this.isEditable;
   }
 
   saveChanges(): void {
     console.log('Saving changes:', this.user);
-    
     this.isEditable = false; 
   }
 

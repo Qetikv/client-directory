@@ -8,7 +8,8 @@
 
     <mat-form-field class="form-field">
       <input matInput placeholder="Customer Number" formControlName="customerNumber" />
-      <mat-error *ngIf="accountForm.get('customerNumber')?.hasError('pattern')">მომხმარებლის ნომერი არასწორია</mat-error>
+      <mat-error *ngIf="accountForm.get('customerNumber')?.hasError('pattern')">მომხმარებლის ნომერი
+        არასწორია</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field">

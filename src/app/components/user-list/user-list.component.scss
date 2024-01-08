@@ -26,7 +26,7 @@
 
   .search-button {
     width: 25%;
-    background-color: #2196F3; /* Match the styling with your design */
+    background-color: #2196F3;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -38,16 +38,17 @@
 .mat-elevation-z8 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 /* Table Pagination */
 .pagination {
   display: flex;
   justify-content: flex-end;
-  padding: 10px; 
-  align-items: center; 
+  padding: 10px;
+  align-items: center;
 }
 
 .pagination button {
-  margin: 0 5px; 
+  margin: 0 5px;
   padding: 8px 12px;
   background-color: #2196F3;
   color: #ffffff;

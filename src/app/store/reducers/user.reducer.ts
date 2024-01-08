@@ -1,29 +1,28 @@
-// src/app/store/user.reducer.ts
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as userActions from '../actions/user.action';
 import { User } from 'src/app/models/user.model';
 
 export interface AppState {
-  users: EntityState<User>;
-  isDialogOpen: boolean;
+    users: EntityState<User>;
+    isDialogOpen: boolean;
 }
 
 export const userAdapter: EntityAdapter<User> = createEntityAdapter<User>({
-  selectId: (user: User) => user.nId,
+    selectId: (user: User) => user.nId,
 });
 
 export const initialState: AppState = {
-  users: userAdapter.getInitialState(),
-  isDialogOpen: false,
+    users: userAdapter.getInitialState(),
+    isDialogOpen: false,
 };
 
 export const appReducer = createReducer(
-  initialState,
-  on(userActions.openDialog, (state) => ({ ...state, isDialogOpen: true })),
-  on(userActions.closeDialog, (state) => ({ ...state, isDialogOpen: false })),
-  on(userActions.setUsers, (state, { users }) => ({ ...state, users: userAdapter.setAll(users, state.users) })),
-  on(userActions.addUserSuccess, (state, { user }) => ({ ...state, users: userAdapter.addOne(user, state.users) })),
+    initialState,
+    on(userActions.openDialog, (state) => ({ ...state, isDialogOpen: true })),
+    on(userActions.closeDialog, (state) => ({ ...state, isDialogOpen: false })),
+    on(userActions.setUsers, (state, { users }) => ({ ...state, users: userAdapter.setAll(users, state.users) })),
+    on(userActions.addUserSuccess, (state, { user }) => ({ ...state, users: userAdapter.addOne(user, state.users) })),
 );
 
 export const { selectAll: selectAllUsers } = userAdapter.getSelectors((state: AppState) => state.users);

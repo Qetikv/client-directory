@@ -1,5 +1,5 @@
 form {
-  width:800px;
+  width: 800px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -35,25 +35,24 @@ section {
   display: flex;
   flex-direction: row;
 
-  &.addresses{
+  &.addresses {
     display: flex;
 
-    .actual{
+    .actual {
       display: flex;
       flex-direction: column;
 
     }
-    .legal{
+
+    .legal {
       display: flex;
       flex-direction: column;
-
     }
   }
-
 }
 
-.buttons{
+.buttons {
   display: flex;
-  width:100%;
+  width: 100%;
   justify-content: space-between;
 }

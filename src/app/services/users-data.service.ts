@@ -18,7 +18,7 @@ export class UsersDataService {
 
   users$: Observable<User[]> = this.usersSubject.asObservable();
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private http: HttpClient, private store: Store) { }
 
   private loadUsersFromLocalStorage(): User[] {
     const storedUsers = localStorage.getItem('users');
@@ -92,7 +92,7 @@ export class UsersDataService {
       })
     );
   }
-  
+
   updateUser(userId: number, updatedUser: User): Observable<User> {
     const apiUrl = `http://localhost:3000/users/${userId}`;
     return this.http.put<User>(apiUrl, updatedUser).pipe(

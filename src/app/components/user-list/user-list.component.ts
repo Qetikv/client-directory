@@ -33,7 +33,7 @@ export class UserListComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private usersDataService: UsersDataService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.store.dispatch(fetchUsers());
@@ -117,7 +117,7 @@ export class UserListComponent implements OnInit {
 
   confirmDelete(userId: number, event: Event): void {
     event.stopPropagation();
-    const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+    const isConfirmed = window.confirm('დარწმუნებული ხართ რომ გსურთ კლიენტის წაშლა?');
     if (isConfirmed) {
       // this.deleteUser(userId);
     }

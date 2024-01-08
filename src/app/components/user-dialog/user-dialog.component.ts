@@ -34,6 +34,11 @@ export class UserDialogComponent implements OnInit {
     });
   }
 
+  getFirstNameErrorMessage = () => getFirstNameErrorMessage(this.form)
+  getLastNameLErrorMessage = () => getLastNameLErrorMessage((this.form))
+  getPrivateNumberErrorMessage = () => getPrivateNumberErrorMessage(this.form)
+  getPhoneNumberErrorMessage = () => getPhoneNumberErrorMessage(this.form)
+
   initializeForm(): void {
     this.form = this.fb.group({
       firstName: [
@@ -64,8 +69,6 @@ export class UserDialogComponent implements OnInit {
       countryActual: ['', Validators.required],
       cityActual: ['', Validators.required],
       addressActual: ['', Validators.required],
-      // legalAddress: this.createAddressGroup(),
-      // actualAddress: this.createAddressGroup()
     });
   }
 
@@ -76,34 +79,19 @@ export class UserDialogComponent implements OnInit {
     }
   }
 
-  private createAddressGroup() {
-    return this.fb.group({
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      address: ['', Validators.required],
-    });
-  }
-
-
-  getFirstNameErrorMessage = () => getFirstNameErrorMessage(this.form)
-  getLastNameLErrorMessage = () => getLastNameLErrorMessage((this.form)) 
-  getPrivateNumberErrorMessage = () => getPrivateNumberErrorMessage(this.form)
-  getPhoneNumberErrorMessage = () => getPhoneNumberErrorMessage(this.form)
-
-  
   onSubmit(): void {
     if (this.form.valid) {
       const userData: User = {
         nId: this.generateUniqueId(),
         ...this.form.value,
       };
-  
+
       this.usersDataService.addUserData(userData).subscribe(
         (response) => {
           console.log('User added successfully:', response);
-    
+
           this.store.dispatch(addUserData({ user: response }));
-  
+
           this.dialogRef.close();
         },
         (error) => {
