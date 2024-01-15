@@ -18,6 +18,7 @@ import {
 } from 'src/app/app.state';
 
 const USERS_PER_PAGE = 10;
+const PAGE_KEY = 'currentPage';
 
 @Component({
   selector: 'app-user-list',
@@ -40,6 +41,9 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initializeSubscriptions();
+    const storedPage = localStorage.getItem(PAGE_KEY);
+    this.currentPage = storedPage ? +storedPage : 1;
+
     this.store.dispatch(fetchUsers());
   }
 
@@ -86,12 +90,14 @@ export class UserListComponent implements OnInit, OnDestroy {
   applyFilter() {
     this.currentPage = 1;
     this.store.dispatch(fetchUsers());
+    localStorage.setItem(PAGE_KEY, this.currentPage.toString());
   }
 
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.store.dispatch(fetchUsers());
+      localStorage.setItem(PAGE_KEY, this.currentPage.toString());
     }
   }
 
