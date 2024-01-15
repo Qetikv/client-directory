@@ -246,6 +246,30 @@
       "accountType": "Savings",
       "currency": "USD",
       "accountStatus": "ACTIVE"
+    },
+    {
+      "id": "9dfa",
+      "accountNumber": "35262",
+      "customerNumber": "6262",
+      "accountType": "Current",
+      "currency": "USD",
+      "accountStatus": "CLOSED"
+    },
+    {
+      "id": "1274",
+      "accountNumber": "35262",
+      "customerNumber": "6262",
+      "accountType": "Current",
+      "currency": "USD",
+      "accountStatus": "CLOSED"
+    },
+    {
+      "id": "6dce",
+      "accountNumber": "1251363642626342",
+      "customerNumber": "35135115",
+      "accountType": "Savings",
+      "currency": "EURO",
+      "accountStatus": "ACTIVE"
     }
   ]
 }

@@ -23,6 +23,7 @@ import { StoreModule } from '@ngrx/store';
 import { UserEffects } from './store/user-list.effects';
 import { appReducer } from './app.state';
 import { userAccountReducer } from './store/reducers/bank-account.reducer';
+import { UserAccountEffects } from './store/bank-account.effects';
 
 @NgModule({
   declarations: [
@@ -49,9 +50,9 @@ import { userAccountReducer } from './store/reducers/bank-account.reducer';
     MatSelectModule,
     MatTableModule,
     // NgRx modules
-    StoreModule.forRoot({ userAccounts: userAccountReducer  }),
+    StoreModule.forRoot({ userAccounts: userAccountReducer,  userAccount: userAccountReducer  }),
     StoreModule.forFeature('appFeature', appReducer),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot([UserEffects, UserAccountEffects]),
     // Other modules
     AppRoutingModule,
   ],

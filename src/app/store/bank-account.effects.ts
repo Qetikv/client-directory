@@ -1,26 +1,35 @@
-// // user-account.effects.ts
-// import { Injectable } from '@angular/core';
-// import { Actions, createEffect, ofType } from '@ngrx/effects';
-// import { catchError, map, mergeMap } from 'rxjs/operators';
-// import { of } from 'rxjs';
-// import { UsersDataService } from '../services/users-data.service';
-// import * as userAccountActions from './actions/bank-account.actions'
+import { Injectable } from '@angular/core';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { of, throwError } from 'rxjs';
+import { catchError, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import * as UserAccountActions from './actions/bank-account.actions';
+import { UserAccountService } from '../services/users-account.service';
+import { Store } from '@ngrx/store';
+import { saveUserAccountData } from './actions/bank-account.actions';
 
-// @Injectable()
-// export class UserAccountEffects {
-//   addUserAccount$ = createEffect(() =>
-//     this.actions$.pipe(
-//       ofType(userAccountActions.addUserAccount),
-//       mergeMap((action) =>
-//         this.usersDataService.saveUserAccountData(action).pipe(
-//           map(() => {
-        
-//           }),
-//           catchError(() => of(userAccountActions.addUserAccountFailure()))
-//         )
-//       )
-//     )
-//   );
+interface AppState {
+    userId: string;
+  }
 
-//   constructor(private actions$: Actions, private usersDataService: UsersDataService) {}
-// }
+@Injectable()
+export class UserAccountEffects {
+    SaveUserAccountData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserAccountActions.saveUserAccountData),
+      mergeMap((action) =>
+        this.usersAccountService.saveUserAccountData(action.accountData.id,action.accountData).pipe(
+          map((addedAcount) => UserAccountActions.saveUserAccountDataSuccess({ accountData: addedAcount })),
+          catchError((error) => {
+            console.error('Error adding user:', error);
+            return throwError(error);
+          })
+        )
+      )
+    )
+  );
+  constructor(
+    private actions$: Actions,
+    private usersAccountService: UserAccountService,
+    private store: Store 
+  ) {}
+}

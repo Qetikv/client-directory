@@ -1,20 +1,25 @@
-// user-account.reducer.ts
 import { createReducer, on } from '@ngrx/store';
-import * as userAccountActions from '../actions/bank-account.actions';
+import * as UserAccountActions from '../actions/bank-account.actions';
 import { UserAccount } from 'src/app/models/bank_account.model';
 
 export interface UserAccountState {
-  userAccounts: UserAccount[];
+  data: UserAccount | null;
+  error: any;
 }
 
 export const initialState: UserAccountState = {
-  userAccounts: [],
+  data: null,
+  error: null,
 };
 
 export const userAccountReducer = createReducer(
   initialState,
-  on(userAccountActions.addUserAccount, (state, { account }) => ({
-    ...state,
-    userAccounts: [...state.userAccounts, account],
-  }))
+
+  on(UserAccountActions.saveUserAccountDataSuccess, (state, { accountData }) => {
+    return { ...state, data: accountData, error: null };
+  }),
+
+  on(UserAccountActions.saveUserAccountDataFailure, (state, { error }) => {
+    return { ...state, data: null, error };
+  })
 );
