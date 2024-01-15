@@ -34,6 +34,8 @@ export const appReducer = createReducer(
   on(userActions.setUser, (state, { user }) => ({ ...state, user })),
   on(userActions.deleteUserSuccess, (state, { id }) => ({ ...state, users: userAdapter.removeOne(id, state.users) })),
   on(userActions.deleteUserFailure, (state, { error }) => state),
+  on(userActions.updateUserSuccess, (state, { user }) => ({ ...state, users: userAdapter.updateOne({ id: user.id, changes: user }, state.users) })),
+  on(userActions.updateUserFailure, (state, { error }) => state),
   on(userActions.setSearchResults, (state, { users }) => ({ ...state, users: userAdapter.setAll(users, state.users) })),
   on(userActions.searchError, (state) => ({ ...state, users: userAdapter.removeAll(state.users) }))
 );

@@ -47,4 +47,19 @@ export class UserEffects {
     )
   )
 );
+
+updateUserData$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(userActions.updateUser),
+    mergeMap((action) =>
+      this.usersDataService.updateUserData(action.user).pipe(
+        map((updatedUser) => userActions.updateUserSuccess({ user: updatedUser })),
+        catchError((error) => {
+          console.error('Error updating user:', error);
+          return of(userActions.updateUserFailure({ error }));
+        })
+      )
+    )
+  )
+);
 }

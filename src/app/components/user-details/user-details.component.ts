@@ -7,7 +7,7 @@ import { UserAccountFormDialogComponent } from '../user-account-form-dialog/user
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { customMobileNumberValidator, customNameValidator, getFirstNameErrorMessage, getLastNameLErrorMessage, getPhoneNumberErrorMessage, getPrivateNumberErrorMessage } from '../utils/userValidators';
 import { Store } from '@ngrx/store';
-import { selectUserById, setUser } from 'src/app/app.state';
+import { selectUserById, setUser, updateUser } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-details',
@@ -35,27 +35,27 @@ export class UserDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.userId = parseInt(params['id'], 10);
-      this.createForm();
-      
-      // Check if user details are in localStorage, if yes, use them
-      const storedUserDetails = localStorage.getItem(`userDetails_${this.userId}`);
-      if (storedUserDetails) {
-        this.user = JSON.parse(storedUserDetails);
+  this.route.params.subscribe((params) => {
+    this.userId = parseInt(params['id'], 10);
+    this.createForm();
+    
+    // Check if user details are in localStorage, if yes, use them
+    const storedUserDetails = localStorage.getItem(`userDetails_${this.userId}`);
+    if (storedUserDetails) {
+      this.user = JSON.parse(storedUserDetails);
+      this.fillUserForm(this.user);
+    } else {
+      // Fetch user details from the store if not found in localStorage
+      this.store.select(selectUserById(this.userId)).subscribe((user) => {
+        this.user = user;
         this.fillUserForm(this.user);
-      } else {
-        // Fetch user details from the store if not found in localStorage
-        this.store.select(selectUserById(this.userId)).subscribe((user) => {
-          this.user = user;
-          this.fillUserForm(this.user);
 
-          // Save user details to localStorage for future use
-          localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(user));
-        });
-      }
-    });
-  }
+        // Save updated user details to localStorage for future use
+        localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(this.user));
+      });
+    }
+  });
+}
 
   createForm(){
     this.form = this.fb.group({
@@ -116,11 +116,14 @@ export class UserDetailsComponent implements OnInit {
   }
 
   saveChanges(): void {
-    this.store.dispatch(setUser({ user: { ...this.user, ...this.form.value } }));
+    this.store.dispatch(setUser({ user: { ...this.form.value } }));
     this.isEditable = false;
-    localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(this.user));
+    localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(this.form.value));
+  
+    const updatedUser: User = this.form.value;
+  
+    this.store.dispatch(updateUser({ user: updatedUser }));
   }
-
 
   openUserAccountFormDialog(): void {
     const dialogRef = this.dialog.open(UserAccountFormDialogComponent, {

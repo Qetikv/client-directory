@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, finalize } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Store } from '@ngrx/store';
-import { addUserSuccess, setSearchResults, fetchUsersError, deleteUserSuccess, deleteUser } from '../app.state';
+import { addUserSuccess, setSearchResults, fetchUsersError, deleteUserSuccess, deleteUser, updateUserSuccess, updateUserFailure } from '../app.state';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +55,25 @@ export class UsersDataService {
       }),
       catchError((error) => {
         console.error(`Error deleting user with ID ${id}:`, error);
+        return throwError(error);
+      })
+    );
+  }
+
+  updateUserData(user: User): Observable<User> {
+    const apiUrl = `http://localhost:3000/users/${user.id}`;
+    
+    return this.http.put<User>(apiUrl, user).pipe(
+      tap((updatedUser) => {
+        // Update the local state by replacing the existing user with the updated user
+        const updatedUsers = this.usersSubject.value.map((u) => (u.id === updatedUser.id ? updatedUser : u));
+        this.usersSubject.next(updatedUsers);
+  
+        this.store.dispatch(updateUserSuccess({ user: updatedUser }));
+      }),
+      catchError((error) => {
+        console.error(`Error updating user with ID ${user.id}:`, error);
+        this.store.dispatch(updateUserFailure({ error }));
         return throwError(error);
       })
     );
