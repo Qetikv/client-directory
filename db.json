@@ -1,34 +1,6 @@
 {
   "users": [
     {
-      "id": "1705295214553",
-      "firstName": "Nia",
-      "lastName": "Kalatozi",
-      "gender": "female",
-      "privateNumber": "03994942342",
-      "mobileNumber": "555443434",
-      "countryLegal": "q",
-      "cityLegal": "q",
-      "addressLegal": "qq",
-      "countryActual": "q",
-      "cityActual": "q",
-      "addressActual": "q"
-    },
-    {
-      "id": "1705295214553",
-      "firstName": "Nia",
-      "lastName": "Kalatozi",
-      "gender": "female",
-      "privateNumber": "03994942342",
-      "mobileNumber": "555443434",
-      "countryLegal": "q",
-      "cityLegal": "q",
-      "addressLegal": "qq",
-      "countryActual": "q",
-      "cityActual": "q",
-      "addressActual": "q"
-    },
-    {
       "id": 1705297956327,
       "firstName": "Keti",
       "lastName": "Kvirikashvili",

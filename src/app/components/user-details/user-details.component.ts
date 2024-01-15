@@ -39,10 +39,21 @@ export class UserDetailsComponent implements OnInit {
       this.userId = parseInt(params['id'], 10);
       this.createForm();
       
-      this.store.select(selectUserById(this.userId)).subscribe((user) => {
+      // Check if user details are in localStorage, if yes, use them
+      const storedUserDetails = localStorage.getItem(`userDetails_${this.userId}`);
+      if (storedUserDetails) {
+        this.user = JSON.parse(storedUserDetails);
+        this.fillUserForm(this.user);
+      } else {
+        // Fetch user details from the store if not found in localStorage
+        this.store.select(selectUserById(this.userId)).subscribe((user) => {
           this.user = user;
           this.fillUserForm(this.user);
-      })
+
+          // Save user details to localStorage for future use
+          localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(user));
+        });
+      }
     });
   }
 
@@ -107,7 +118,7 @@ export class UserDetailsComponent implements OnInit {
   saveChanges(): void {
     this.store.dispatch(setUser({ user: { ...this.user, ...this.form.value } }));
     this.isEditable = false;
-
+    localStorage.setItem(`userDetails_${this.userId}`, JSON.stringify(this.user));
   }
 
 
