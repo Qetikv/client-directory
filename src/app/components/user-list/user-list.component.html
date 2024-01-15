@@ -1,17 +1,12 @@
-<button mat-button class="add-client-button" (click)="openDialog()">კლიენტის დამატება</button>
-
-<div class="search-container">
-  <mat-form-field>
-    <input matInput class="search-bar" [(ngModel)]="searchText" placeholder="სახელით მოძებნა" />
-  </mat-form-field>
-  <button mat-button class="search-button" (click)="applySearchFilter()">ძებნა</button>
-</div>
+<!-- user-list.component.html -->
+<button mat-button class="add-client-button" (click)="openUserDialog()">კლიენტის დამატება</button>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="users" class="mat-elevation-z8">
-    <ng-container matColumnDef="nId">
+    <!-- Columns for User Data -->
+    <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>კლიენტის ნომერი</th>
-      <td mat-cell *matCellDef="let user">{{ user.nId }}</td>
+      <td mat-cell *matCellDef="let user">{{ user.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="firstName">
@@ -29,10 +24,11 @@
       <td mat-cell *matCellDef="let user">{{ user.gender }}</td>
     </ng-container>
 
+    <!-- Action Buttons -->
     <ng-container matColumnDef="delete">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="warn" (click)="confirmDelete(user.nId, $event)">
+        <button mat-icon-button color="warn" (click)="confirmDelete(user.id, $event)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>
@@ -41,15 +37,18 @@
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="primary" [routerLink]="['/edit', user.nId]">
+        <button mat-icon-button color="primary" [routerLink]="['/details', user.id]">
           <mat-icon>edit</mat-icon>
         </button>
       </td>
     </ng-container>
 
+    <!-- Table Rows -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="redirectToDetailsPage(row.nId)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <!-- Pagination Controls -->
   <div class="pagination">
     <button mat-button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">წინა</button>
     <span>გვერდი {{ currentPage }} დან {{ totalPages }}</span>

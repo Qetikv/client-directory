@@ -1,5 +1,5 @@
 export interface UserAccount {
-    nId: number;
+    id: number;
     customerNumber: number;
     accountType: string;
     currency: string;

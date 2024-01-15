@@ -1,7 +1,5 @@
-// user-details.component.ts
-
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsersDataService } from '../../services/users-data.service';
 import { User } from '../../models/user.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,8 +7,7 @@ import { UserAccountFormDialogComponent } from '../user-account-form-dialog/user
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { customMobileNumberValidator, customNameValidator, getFirstNameErrorMessage, getLastNameLErrorMessage, getPhoneNumberErrorMessage, getPrivateNumberErrorMessage } from '../utils/userValidators';
 import { Store } from '@ngrx/store';
-import { selectUserById } from 'src/app/app.state';
-// import { selectUSerById } from 'src/app/app.state';
+import { selectUserById, setUser } from 'src/app/app.state';
 
 @Component({
   selector: 'app-user-details',
@@ -20,31 +17,30 @@ import { selectUserById } from 'src/app/app.state';
 export class UserDetailsComponent implements OnInit {
   user: User | undefined;
   userId: number | null = null;
-  isEditable = false; 
-  showUserAccountFormDialog = false; 
-
+  isEditable = false;
+  showUserAccountFormDialog = false;
   form!: FormGroup;
 
-  getFirstNameErrorMessage = () => getFirstNameErrorMessage(this.form)
-  getLastNameLErrorMessage = () => getLastNameLErrorMessage((this.form)) 
-  getPrivateNumberErrorMessage = () => getPrivateNumberErrorMessage(this.form)
-  getPhoneNumberErrorMessage = () => getPhoneNumberErrorMessage(this.form) 
-  
+
+  getFirstNameErrorMessage = () => getFirstNameErrorMessage(this.form);
+  getLastNameLErrorMessage = () => getLastNameLErrorMessage((this.form));
+  getPrivateNumberErrorMessage = () => getPrivateNumberErrorMessage(this.form);
+  getPhoneNumberErrorMessage = () => getPhoneNumberErrorMessage(this.form);
+
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private store : Store,
-  ) { }
+    private store: Store,
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.userId = parseInt(params['userId'], 10);
+      this.userId = parseInt(params['id'], 10);
       this.createForm();
       
       this.store.select(selectUserById(this.userId)).subscribe((user) => {
           this.user = user;
-          //here we will check if user is not undefined we will fill the form else get user from backent and then fill the form
           this.fillUserForm(this.user);
       })
     });
@@ -52,7 +48,7 @@ export class UserDetailsComponent implements OnInit {
 
   createForm(){
     this.form = this.fb.group({
-      nId:["", [ Validators.required ]],
+      id:["", [ Validators.required ]],
       firstName: [
         "",
         [
@@ -83,10 +79,12 @@ export class UserDetailsComponent implements OnInit {
       addressActual: ['', Validators.required],
     })
   }
+
   fillUserForm(user: User | undefined) {
+    this.user = user;
     if (user) {
       this.form.setValue({
-        nId: user.nId,
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         gender: user.gender,
@@ -98,7 +96,7 @@ export class UserDetailsComponent implements OnInit {
         addressLegal: user.addressLegal,
         cityLegal: user.cityLegal,
         countryLegal: user.countryLegal
-      })
+      });
     }
   }
 
@@ -107,29 +105,17 @@ export class UserDetailsComponent implements OnInit {
   }
 
   saveChanges(): void {
-    console.log('Saving changes:', this.user);
-    this.isEditable = false; 
+    this.store.dispatch(setUser({ user: { ...this.user, ...this.form.value } }));
+    this.isEditable = false;
+
   }
+
 
   openUserAccountFormDialog(): void {
     const dialogRef = this.dialog.open(UserAccountFormDialogComponent, {
-      width: '900px',
+      width: '800px',
       height: '600px',
-      data: { user: this.user }, 
+      data: { user: this.user },
     });
-
-    //     dialogRef.afterClosed().subscribe((result) => {
-    //       if (result) {
-    //         // Handle the result (saved data) here if needed
-    //         console.log('User Account Form Dialog closed with result:', result);
-    //         // Update the user object with the new account data
-    //         if (!this.user?.accounts) {
-    //           this.user!.accounts = [];
-    //         }
-    //         this.user!.accounts.push(result);
-    //       }
-    // // 
-    //       this.showUserAccountFormDialog = false;
-    //     });
   }
 }

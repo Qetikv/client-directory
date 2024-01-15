@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { UsersDataService } from './services/users-data.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +6,7 @@ import { UsersDataService } from './services/users-data.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private userDataService: UsersDataService) { }
+  title = 'client-directory';
+
+  constructor() { }
 }

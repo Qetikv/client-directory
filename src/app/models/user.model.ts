@@ -1,5 +1,5 @@
 export interface User {
-  nId: number;
+  id: number;
   firstName: string;
   lastName: string;
   gender: string;
@@ -11,10 +11,4 @@ export interface User {
   addressLegal: string;
   cityLegal: string;
   countryLegal: string;
-}
-
-export interface Address {
-  country: string;
-  city: string;
-  address: string;
 }

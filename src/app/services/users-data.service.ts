@@ -1,131 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Store } from '@ngrx/store';
-import { addUserSuccess, setSearchResults } from '../app.state';
-import { UserAccount } from '../models/bank_account.model';
-import * as userAccountActions from '../store/actions/bank-account.actions';
-
+import { addUserSuccess, setSearchResults, fetchUsersError, deleteUserSuccess, deleteUser } from '../app.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersDataService {
-  private users: User[] = this.loadUsersFromLocalStorage();
-  private usersSubject = new BehaviorSubject<User[]>(this.users);
-  currentPage: number = 1;
-  usersPerPage: number = 2;
-  totalPages: number = 1;
-  searchText = '';
+  private usersSubject = new BehaviorSubject<User[]>([]);
 
   users$: Observable<User[]> = this.usersSubject.asObservable();
+    private userSubject = new BehaviorSubject<User | null>(null);
+  user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private store: Store) { }
-
-  private loadUsersFromLocalStorage(): User[] {
-    const storedUsers = localStorage.getItem('users');
-    return storedUsers ? JSON.parse(storedUsers) : [];
-  }
-
-  private saveUsersToLocalStorage(users: User[]): void {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-
-  // saveUserAccountData(accountData: any): void {
-  //   console.log('Saving user account data:', accountData);
-  //   const storedAccounts = localStorage.getItem('userAccounts');
-  //   const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
-  //   accounts.push(accountData);
-  //   localStorage.setItem('userAccounts', JSON.stringify(accounts));
-  // }
-
-  saveUserAccountData(userAccount: UserAccount): void {
-    this.store.dispatch(userAccountActions.addUserAccount( { account: userAccount}));
-
-  }
+  constructor(private http: HttpClient, private store: Store) {}
 
   addUserData(user: User): Observable<User> {
     return this.http.post<User>('http://localhost:3000/users', user).pipe(
       tap((addedUser) => {
-        this.users = [...this.users, addedUser];
-        this.usersSubject.next([...this.users]);
+        this.usersSubject.next([...this.usersSubject.value, addedUser]);
         this.store.dispatch(addUserSuccess({ user: addedUser }));
+      }),
+      catchError((error) => {
+        console.error('Error adding user:', error);
+        return throwError(error);
       })
     );
   }
-
-  fetchUsers(): Observable<User[]> {
-    console.log('Fetching users...');
-    const params = {
-      search: this.searchText || '',
-      page: this.currentPage.toString(),
-      limit: this.usersPerPage.toString(),
-    };
-
-    const storedResults = localStorage.getItem('searchResults');
   
-    if (storedResults) {
-      const parsedResults: User[] = JSON.parse(storedResults);
-      this.store.dispatch(setSearchResults({ users: parsedResults }));
-      return of(parsedResults);
-    } else {
-      return this.http.get<User[]>('http://localhost:3000/users', { params }).pipe(
-        tap((users) => {
-          localStorage.setItem('searchResults', JSON.stringify(users));
-          this.store.dispatch(setSearchResults({ users }));
-        }),
-        catchError((error) => {
-          console.error('Error fetching users:', error);
-          return throwError(error);
-        })
-      );
-    }}
-  getUserAccounts(userId: number): any[] {
-    console.log('Fetching user accounts for user with ID:', userId);
-
-    const storedAccounts = localStorage.getItem('userAccounts');
-    return storedAccounts ? JSON.parse(storedAccounts) : [];
-  }
-
-  getUsers(): User[] {
-    return this.users;
-  }
-
-  clearLocalStorageData(): void {
-    localStorage.removeItem('users');
-    this.users = [];
-    this.usersSubject.next([]);
-  }
-
-  deleteUserById(userId: number): Observable<void> {
-    const apiUrl = `http://localhost:3000/users/${userId}`;
-    return this.http.delete<void>(apiUrl).pipe(
-      tap(() => {
-        this.users = this.users.filter(user => user.nId !== userId);
-        this.usersSubject.next([...this.users]);
-        console.log(`User with ID ${userId} deleted successfully`);
+  fetchUsers(): Observable<User[]> {
+    return this.http.get<User[]>('http://localhost:3000/users').pipe(
+      tap((users) => {
+        this.usersSubject.next(users);
+        this.store.dispatch(setSearchResults({ users }));
       }),
       catchError((error) => {
-        console.error(`Error deleting user with ID ${userId}:`, error);
+        console.error('Error fetching users:', error);
+        this.store.dispatch(fetchUsersError({ error }));
         return throwError(error);
       })
     );
   }
 
-  updateUser(userId: number, updatedUser: User): Observable<User> {
-    const apiUrl = `http://localhost:3000/users/${userId}`;
-    return this.http.put<User>(apiUrl, updatedUser).pipe(
-      tap((user) => {
+  deleteUserById(id: number): Observable<User> {
+    const apiUrl = `http://localhost:3000/users/${id}`;
+    return this.http.delete<User>(apiUrl).pipe(
+      tap((deleted) => {
+        this.usersSubject.next([...this.usersSubject.value, deleted]);
+        this.store.dispatch(deleteUserSuccess({ id }));
+        console.log(`User with ID ${id} deleted successfully`);
       }),
       catchError((error) => {
-        console.error('Error updating user:', error);
+        console.error(`Error deleting user with ID ${id}:`, error);
         return throwError(error);
       })
     );
-  }
-
-  getUserById(userId: number): User | undefined {
-    return this.users.find((user) => user.nId === userId);
   }
 }

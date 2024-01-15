@@ -20,10 +20,17 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('client-directory');
   });
 
-  it('should render title', () => {
+  it('should render the navigation', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('client-directory app is running!');
+
+    const h2Element = compiled.querySelector('h2')!;
+    
+    expect(compiled.querySelector('nav')).toBeTruthy();
+    expect(compiled.querySelector('a[routerLink="/users"]')).toBeTruthy();
+    expect(h2Element.textContent).toContain('კლიენტების ცნობარი');
+    
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

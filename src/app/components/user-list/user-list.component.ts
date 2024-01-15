@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 import { Router } from '@angular/router';
@@ -7,52 +7,57 @@ import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { UsersDataService } from 'src/app/services/users-data.service';
-import { AppState, closeDialog, fetchUsers, openDialog, selectIsDialogOpen, selectUsers, setSearchText, setUsers } from 'src/app/app.state';
+import {
+  AppState,
+  closeDialog,
+  deleteUser,
+  deleteUserSuccess,
+  fetchUsers,
+  selectIsDialogOpen,
+  selectUsers
+} from 'src/app/app.state';
+
+const USERS_PER_PAGE = 10;
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements OnInit {
-  userList: User[] = [];
+export class UserListComponent implements OnInit, OnDestroy {
   users: MatTableDataSource<User> = new MatTableDataSource<User>();
-  displayedColumns: string[] = ['nId', 'firstName', 'lastName', 'gender', 'delete', 'edit'];
-  searchText: string = '';
-  isDialogOpen!: boolean;
-
-  currentPage: number = 1;
-  usersPerPage: number = 10;
-  totalPages: number = 1;
-
+  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'gender', 'delete', 'edit'];
+  isDialogOpen = false;
+  currentPage = 1;
+  totalPages = 1;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private dialog: MatDialog,
-    private router: Router,
     private store: Store<AppState>,
-    private usersDataService: UsersDataService
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    this.initializeSubscriptions();
     this.store.dispatch(fetchUsers());
+  }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeSubscriptions() {
     this.store
       .select(selectUsers)
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (users) => {
-          console.log(users);
-          this.userList = users;
-          this.store.dispatch(setSearchText({ searchText: this.searchText }));
-          this.applySearchFilter();
-          this.calculateTotalPages();
-          this.paginateUsers();
+          this.calculateTotalPages(users);
+          this.paginateUsers(users);
         },
-        (error) => {
-          console.error('Error fetching users:', error);
-        }
+        (error) => console.error('Error fetching users:', error)
       );
 
     this.store
@@ -67,34 +72,15 @@ export class UserListComponent implements OnInit {
       });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private openUserDialog(): void {
+  openUserDialog(): void {
     const dialogRef = this.dialog.open(UserDialogComponent, {
       width: '800px',
       height: '600px',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.store.dispatch(closeDialog());
     });
-  }
-
-  applySearchFilter() {
-    const filteredUsers = this.userList.filter(user =>
-      this.isMatchingSearch(user, this.searchText)
-    );
-  
-    this.totalPages = Math.ceil(filteredUsers.length / this.usersPerPage);
-    this.paginateUsers(filteredUsers);
-    this.saveFilteredUsersToLocalStorage(filteredUsers);
-  }
-
-  private saveFilteredUsersToLocalStorage(filteredUsers: User[]): void {
-    localStorage.setItem('filteredUsers', JSON.stringify(filteredUsers));
   }
 
   applyFilter() {
@@ -105,43 +91,25 @@ export class UserListComponent implements OnInit {
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.paginateUsers();
+      this.store.dispatch(fetchUsers());
     }
   }
 
-  openDialog(): void {
-    this.store.dispatch(openDialog());
-  }
-
-  // deleteUser(userId: number): void {
-  //   this.store.dispatch(deleteUser({ userId }));
-  // }
-
-  redirectToDetailsPage(userId: number): void {
-    this.router.navigate(['/details', userId]);
-  }
-
-  confirmDelete(userId: number, event: Event): void {
+  confirmDelete(id: number, event: Event): void {
     event.stopPropagation();
     const isConfirmed = window.confirm('დარწმუნებული ხართ რომ გსურთ კლიენტის წაშლა?');
     if (isConfirmed) {
-      // this.deleteUser(userId);
+      this.store.dispatch(deleteUser({ id }));
     }
   }
 
-  private isMatchingSearch(user: User, searchText: string): boolean {
-    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-    return fullName.includes(searchText.toLowerCase());
+  private calculateTotalPages(users: User[]) {
+    this.totalPages = Math.ceil(users.length / USERS_PER_PAGE);
   }
 
-  private calculateTotalPages() {
-    this.totalPages = Math.ceil(this.userList.length / this.usersPerPage);
-  }
-
-  private paginateUsers(filteredUsers?: User[]) {
-    const data = filteredUsers || this.userList;
-    const startIndex = (this.currentPage - 1) * this.usersPerPage;
-    const endIndex = startIndex + this.usersPerPage;
-    this.users.data = data.slice(startIndex, endIndex);
+  private paginateUsers(users: User[]) {
+    const startIndex = (this.currentPage - 1) * USERS_PER_PAGE;
+    const endIndex = startIndex + USERS_PER_PAGE;
+    this.users.data = users.slice(startIndex, endIndex);
   }
 }

@@ -39,7 +39,7 @@ export class UserAccountFormDialogComponent implements OnInit {
     if (this.accountForm.valid) {
       const accountData: UserAccount = this.accountForm.value;
 
-      this.usersDataService.saveUserAccountData(accountData);
+      // this.usersDataService.saveUserAccountData(accountData);
 
       this.dialogRef.close(accountData);
     }
