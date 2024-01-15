@@ -16,9 +16,11 @@ import {
   selectIsDialogOpen,
   selectUsers
 } from 'src/app/app.state';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 const USERS_PER_PAGE = 10;
 const PAGE_KEY = 'currentPage';
+const SEARCH_KEY = 'searchQuery';
 
 @Component({
   selector: 'app-user-list',
@@ -31,18 +33,25 @@ export class UserListComponent implements OnInit, OnDestroy {
   isDialogOpen = false;
   currentPage = 1;
   totalPages = 1;
+  searchForm!: FormGroup;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private dialog: MatDialog,
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
     this.initializeSubscriptions();
-    const storedPage = localStorage.getItem(PAGE_KEY);
-    this.currentPage = storedPage ? +storedPage : 1;
+    this.currentPage = parseInt(this.retrieveFromLocalStorage(PAGE_KEY) || '1', 10);
+
+    // Restore search query from local storage
+    const storedSearchQuery = this.retrieveFromLocalStorage(SEARCH_KEY);
+    this.searchForm = this.fb.group({
+      searchQuery: [storedSearchQuery || ''], // Default value is either the stored value or an empty string
+    });
 
     this.store.dispatch(fetchUsers());
   }
@@ -58,23 +67,30 @@ export class UserListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (users) => {
+          if (this.searchForm?.value?.searchQuery) {
+            // Apply filter only if there's a search query
+            users = this.filterUsers(users);
+          }
+  
           this.calculateTotalPages(users);
           this.paginateUsers(users);
         },
         (error) => console.error('Error fetching users:', error)
       );
-
+  
     this.store
       .select(selectIsDialogOpen)
       .pipe(takeUntil(this.destroy$))
       .subscribe((isDialogOpen) => {
         this.isDialogOpen = isDialogOpen;
-
+  
         if (isDialogOpen) {
           this.openUserDialog();
         }
       });
   }
+  
+
 
   openUserDialog(): void {
     const dialogRef = this.dialog.open(UserDialogComponent, {
@@ -90,8 +106,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   applyFilter() {
     this.currentPage = 1;
     this.store.dispatch(fetchUsers());
-    localStorage.setItem(PAGE_KEY, this.currentPage.toString());
-  }
+    this.saveToLocalStorage(PAGE_KEY, this.currentPage.toString());
+    this.saveToLocalStorage(SEARCH_KEY, this.searchForm.value.searchQuery);  }
 
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
@@ -111,6 +127,23 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private calculateTotalPages(users: User[]) {
     this.totalPages = Math.ceil(users.length / USERS_PER_PAGE);
+  }
+
+private filterUsers(users: User[]): User[] {
+  const lowerCaseQuery = (this.searchForm?.value?.searchQuery || '').toLowerCase();
+  return users.filter(user => 
+    user.firstName.toLowerCase().includes(lowerCaseQuery) ||
+    user.lastName.toLowerCase().includes(lowerCaseQuery)
+  );
+}
+
+
+  private saveToLocalStorage(key: string, value: string): void {
+    localStorage.setItem(key, value);
+  }
+
+  private retrieveFromLocalStorage(key: string): string | null {
+    return localStorage.getItem(key);
   }
 
   private paginateUsers(users: User[]) {

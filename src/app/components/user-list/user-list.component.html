@@ -1,5 +1,13 @@
-<!-- user-list.component.html -->
-<button mat-button class="add-client-button" (click)="openUserDialog()">კლიენტის დამატება</button>
+<div class="search-container">
+  <button mat-button class="add-client-button" (click)="openUserDialog()">კლიენტის დამატება</button>
+  <form [formGroup]="searchForm" (ngSubmit)="applyFilter()" class="search-bar">
+    <mat-form-field appearance="fill">
+      <mat-label>Search</mat-label>
+      <input matInput formControlName="searchQuery" placeholder="Enter name or surname">
+    </mat-form-field>
+  </form>
+  <button mat-button class="search-button" type="submit">Search</button>
+</div>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="users" class="mat-elevation-z8">
